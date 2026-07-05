@@ -8,4 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Client'
+export type * from './models/Motorcycle'
 export type * from './commonInputTypes'

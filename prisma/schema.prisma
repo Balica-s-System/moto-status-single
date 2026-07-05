@@ -11,3 +11,49 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Client {
+  id          String       @id @default(uuid())
+  name        String
+  cpf         String       @unique
+  city        String
+  sellersName String
+  billingDate DateTime?
+  motorcycles Motorcycle[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([updatedAt])
+  @@map("clients")
+}
+
+model Motorcycle {
+  id                    String              @id @default(uuid())
+  chassi                String              @unique
+  model                 String
+  forecastArrival       DateTime?
+  forecastArrivalStatus ArrivalStatus       @default(NO_INFORMATION)
+  registrationStatus    RegistrationStatus?
+  registrationDate      DateTime?
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([updatedAt])
+  @@map("motorcycles")
+}
+
+enum RegistrationStatus {
+  NO_PLATE
+  PLATING
+  PLATED
+}
+
+enum ArrivalStatus {
+  DELAYED
+  ARRIVED
+  NO_INFORMATION
+}
