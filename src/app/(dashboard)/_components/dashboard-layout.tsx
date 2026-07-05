@@ -10,6 +10,7 @@ import { Collapsible } from "radix-ui";
 import { ReactNode, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type RouteGroup ={
   group: string;
@@ -53,7 +54,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
           </Collapsible.Trigger>
         </Collapsible.Root>
         <div className="flex items-center gap-x-2">
-          {/* <ThemeToggle /> */}
+          <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
