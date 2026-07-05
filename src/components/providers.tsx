@@ -1,4 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
+"use client"
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ReactNode } from 'react'
 import { toast } from "sonner";
@@ -24,15 +26,17 @@ const queryClient = new QueryClient({
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
+    <QueryClientProvider client={queryClient}>
       <NextThemesProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
       >
-        <Toaster/>
+        <Toaster />
         {children}
-    </NextThemesProvider>
+      </NextThemesProvider>
+    </QueryClientProvider>
   )
 }
 
