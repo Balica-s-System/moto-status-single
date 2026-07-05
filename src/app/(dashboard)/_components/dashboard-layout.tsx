@@ -26,12 +26,12 @@ const ROUTE_GROUPS: RouteGroup[] = [
     group: "Administração",
     items: [
       {
-        href: "/admin/clients",
+        href: "/admin/management/clients",
         label: "Clientes",
         icon: <Users2Icon className="mr-2 size-3"/>
       }, 
       {
-        href: "/admin/inventory",
+        href: "/admin/management/inventory",
         label: "Estoque",
         icon: <BoxIcon  className="mr-2 size-3"/>
       }
