@@ -7,6 +7,9 @@ const getMotorcycles = async () => {
   return await db.motorcycle.findMany();
 };
 
+const toDateString = (value: Date | null | undefined): string =>
+  value ? value.toISOString().split("T")[0] : "";
+
 const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
   const res = await db.motorcycle.findFirst({
     where: {
@@ -19,10 +22,10 @@ const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
     chassi: res?.chassi ?? "",
     id,
     model: res?.model ?? "",
-    forecastArrival: res?.forecastArrival ?? null,
-    forecastArrivalStatus: res?.forecastArrivalStatus ?? "",
-    registrationDate: res?.registrationDate ?? null,
-    registrationStatus: res?.registrationStatus ?? "",
+    forecastArrival: toDateString(res?.forecastArrival),
+    forecastArrivalStatus: res?.forecastArrivalStatus ?? "NO_INFORMATION",
+    registrationDate: toDateString(res?.registrationDate),
+    registrationStatus: res?.registrationStatus ?? null,
   };
 };
 

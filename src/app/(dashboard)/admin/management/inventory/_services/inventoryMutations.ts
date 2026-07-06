@@ -9,6 +9,9 @@ const deleteMotorcycle = async (id: string) => {
   await db.motorcycle.delete({ where: { id } });
 };
 
+const toDateOrNull = (value: string | null | undefined): Date | null =>
+  value ? new Date(value) : null;
+
 const createMotorcycle = async (data: MotorcycleSchema) => {
   await executeAction({
     actionFn: () =>
@@ -16,11 +19,11 @@ const createMotorcycle = async (data: MotorcycleSchema) => {
         data: {
           model: data.model,
           chassi: data.chassi,
-          forecastArrival: data.forecastArrival,
+          forecastArrival: toDateOrNull(data.forecastArrival),
           forecastArrivalStatus: data.forecastArrivalStatus as ArrivalStatus,
           registrationStatus:
             data.registrationStatus as RegistrationStatus | null,
-          registrationDate: data.registrationDate,
+          registrationDate: toDateOrNull(data.registrationDate),
         },
       }),
   });

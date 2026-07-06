@@ -1,12 +1,12 @@
 import { createStore } from "@/lib/createStore";
 
 type State = {
-  motorcycleId: string | null;
+  selectedMotorcycleId: string | null;
   inventoryDialogOpen: boolean;
 };
 
 type Actions = {
-  updateMotorcycleId: (id: State["motorcycleId"]) => void;
+  updateMotorcycleId: (id: State["selectedMotorcycleId"]) => void;
   updateInventoryDialogOpen: (is: State["inventoryDialogOpen"]) => void;
 };
 
@@ -14,10 +14,10 @@ type Store = State & Actions;
 
 const useInventoryStore = createStore<Store>(
   (set) => ({
-    motorcycleId: null,
+    selectedMotorcycleId: null,
     updateMotorcycleId: (id) =>
       set((state) => {
-        state.motorcycleId = id;
+        state.selectedMotorcycleId = id;
       }),
     inventoryDialogOpen: false,
     updateInventoryDialogOpen: (is) =>

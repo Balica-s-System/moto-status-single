@@ -10,11 +10,11 @@ const useGetMotorcycles = () => {
 };
 
 const useMotorcycle = () => {
-  const { motorcycleId } = useInventoryStore();
+  const { selectedMotorcycleId } = useInventoryStore();
   return useQuery({
-    queryKey: ["motorcycle", { motorcycleId }],
-    queryFn: () => getMotorcycle(motorcycleId!),
-    enabled: !!motorcycleId,
+    queryKey: ["motorcycle", { selectedMotorcycleId }],
+    queryFn: () => getMotorcycle(selectedMotorcycleId!),
+    enabled: !!selectedMotorcycleId,
   });
 };
 
