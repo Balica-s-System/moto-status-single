@@ -7,174 +7,104 @@ import {
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = `${process.env.DATABASE_URL}`;
-
 const adapter = new PrismaPg({ connectionString });
-
 const prisma = new PrismaClient({ adapter });
 
-const motorcycles = [
-  {
-    chassi: "93HMCG130TA123466",
-    model: "Honda Elite 125",
-    forecastArrival: new Date("2026-08-01"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG131TA123467",
-    model: "Honda NXR 160 Bros",
-    forecastArrival: new Date("2026-08-03"),
-    forecastArrivalStatus: ArrivalStatus.DELAYED,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG132TA123468",
-    model: "Honda CB 650R",
-    forecastArrival: new Date("2026-08-05"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-02"),
-  },
-  {
-    chassi: "93HMCG133TA123469",
-    model: "Honda CBR 650R",
-    forecastArrival: new Date("2026-08-06"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG134TA123470",
-    model: "Honda CB 500F",
-    forecastArrival: new Date("2026-08-07"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-04"),
-  },
-  {
-    chassi: "93HMCG135TA123471",
-    model: "Honda NX 500",
-    forecastArrival: new Date("2026-08-09"),
-    forecastArrivalStatus: ArrivalStatus.DELAYED,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG136TA123472",
-    model: "Honda CRF 250F",
-    forecastArrival: new Date("2026-08-10"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG137TA123473",
-    model: "Honda CRF 1100L Africa Twin Adventure Sports",
-    forecastArrival: new Date("2026-08-12"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-08"),
-  },
-  {
-    chassi: "93HMCG138TA123474",
-    model: "Honda X-ADV 750",
-    forecastArrival: new Date("2026-08-13"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: null,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG139TA123475",
-    model: "Honda Forza 350",
-    forecastArrival: new Date("2026-08-15"),
-    forecastArrivalStatus: ArrivalStatus.DELAYED,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG140TA123476",
-    model: "Honda CB 1000R",
-    forecastArrival: new Date("2026-08-17"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-12"),
-  },
-  {
-    chassi: "93HMCG141TA123477",
-    model: "Honda CBR 1000RR-R Fireblade",
-    forecastArrival: new Date("2026-08-18"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG142TA123478",
-    model: "Honda Gold Wing Tour",
-    forecastArrival: new Date("2026-08-20"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-15"),
-  },
-  {
-    chassi: "93HMCG143TA123479",
-    model: "Honda Rebel 500",
-    forecastArrival: new Date("2026-08-21"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG144TA123480",
-    model: "Honda Shadow Phantom",
-    forecastArrival: new Date("2026-08-23"),
-    forecastArrivalStatus: ArrivalStatus.DELAYED,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG145TA123481",
-    model: "Honda NC750X",
-    forecastArrival: new Date("2026-08-24"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-19"),
-  },
-  {
-    chassi: "93HMCG146TA123482",
-    model: "Honda CBR 500R",
-    forecastArrival: new Date("2026-08-26"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG147TA123483",
-    model: "Honda XR 300 Tornado",
-    forecastArrival: new Date("2026-08-28"),
-    forecastArrivalStatus: ArrivalStatus.DELAYED,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
-  {
-    chassi: "93HMCG148TA123484",
-    model: "Honda CG 160 Start",
-    forecastArrival: new Date("2026-08-29"),
-    forecastArrivalStatus: ArrivalStatus.ARRIVED,
-    registrationStatus: RegistrationStatus.PLATED,
-    registrationDate: new Date("2026-08-25"),
-  },
-  {
-    chassi: "93HMCG149TA123485",
-    model: "Honda CB 750 Hornet",
-    forecastArrival: new Date("2026-08-31"),
-    forecastArrivalStatus: ArrivalStatus.NO_INFORMATION,
-    registrationStatus: RegistrationStatus.NO_PLATE,
-    registrationDate: null,
-  },
+// Base de dados de modelos da Honda para variação
+const hondaModels = [
+  "Honda CG 160 Titan",
+  "Honda CG 160 Fan",
+  "Honda CG 160 Start",
+  "Honda Biz 125",
+  "Honda Biz 110i",
+  "Honda Pop 110i ES",
+  "Honda CB 300F Twister",
+  "Honda NXR 160 Bros",
+  "Honda XRE 190",
+  "Honda XRE 300 Sahara",
+  "Honda CRF 250F",
+  "Honda PCX 160",
+  "Honda ADV",
+  "Honda Elite 125",
+  "Honda CB 500X",
+  "Honda CB 500F",
+  "Honda NX 500",
+  "Honda NC 750X",
+  "Honda CB 650R",
+  "Honda CBR 650R",
+  "Honda CB 750 Hornet",
+  "Honda CB 1000R",
+  "Honda CBR 1000RR-R Fireblade",
+  "Honda XL 750 Transalp",
+  "Honda CRF 1100L Africa Twin",
+  "Honda X-ADV 750",
+  "Honda Forza 350",
+  "Honda Gold Wing Tour",
+  "Honda Rebel 500",
 ];
+
+const arrivalStatuses = [
+  ArrivalStatus.NO_INFORMATION,
+  ArrivalStatus.DELAYED,
+  ArrivalStatus.ARRIVED,
+];
+
+const registrationStatuses = [
+  RegistrationStatus.NO_PLATE,
+  RegistrationStatus.PLATING,
+  RegistrationStatus.PLATED,
+];
+
+// Gerador dinâmico de 200 motocicletas
+function generate200Motorcycles() {
+  return Array.from({ length: 200 }).map((_, index) => {
+    const idSequence = index + 100; // Começa no 100 para evitar conflitos de chassi anteriores
+    const chassi = `93HMCG130TA1${String(idSequence).padStart(5, "0")}`;
+    const model = hondaModels[Math.floor(Math.random() * hondaModels.length)];
+    const forecastArrivalStatus =
+      arrivalStatuses[Math.floor(Math.random() * arrivalStatuses.length)];
+
+    // Regras lógicas para datas e emplacamento
+    let forecastArrival: Date | null = new Date("2026-08-01");
+    forecastArrival.setDate(
+      forecastArrival.getDate() + Math.floor(Math.random() * 30),
+    );
+
+    let registrationStatus: RegistrationStatus | null =
+      RegistrationStatus.NO_PLATE;
+    let registrationDate: Date | null = null;
+
+    if (forecastArrivalStatus === ArrivalStatus.ARRIVED) {
+      registrationStatus =
+        registrationStatuses[
+          Math.floor(Math.random() * registrationStatuses.length)
+        ];
+      if (registrationStatus === RegistrationStatus.PLATED) {
+        registrationDate = new Date(forecastArrival);
+        registrationDate.setDate(
+          registrationDate.getDate() + Math.floor(Math.random() * 5),
+        );
+      }
+    } else if (forecastArrivalStatus === ArrivalStatus.NO_INFORMATION) {
+      forecastArrival = null;
+    }
+
+    return {
+      chassi,
+      model,
+      forecastArrival,
+      forecastArrivalStatus,
+      registrationStatus,
+      registrationDate,
+    };
+  });
+}
+
 async function main() {
+  const motorcycles = generate200Motorcycles();
+
+  console.log(`Starting seed process for ${motorcycles.length} motorcycles...`);
+
   for (const bike of motorcycles) {
     const existing = await prisma.motorcycle.findUnique({
       where: { chassi: bike.chassi },
@@ -182,11 +112,13 @@ async function main() {
 
     if (!existing) {
       await prisma.motorcycle.create({ data: bike });
-      console.log(`Created motorcycle: ${bike.model}`);
+      console.log(`Created motorcycle: ${bike.model} (Chassi: ${bike.chassi})`);
     } else {
       console.log(`Motorcycle already exists: ${bike.chassi}`);
     }
   }
+
+  console.log("Seed process completed successfully.");
 }
 
 main()

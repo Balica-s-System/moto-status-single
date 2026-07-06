@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getMotorcycle, getMotorcycles } from "./inventoryQueries";
 import { useInventoryStore } from "../_libs/use-inventory-store";
+import type { MotorcycleFiltersSchema } from "../_types/motorcycleFilterSchema";
 
-const useGetMotorcycles = () => {
+const useGetMotorcycles = (filters: MotorcycleFiltersSchema) => {
   return useQuery({
-    queryKey: ["motorcycle"],
-    queryFn: getMotorcycles,
+    queryKey: ["motorcycle", filters],
+    queryFn: () => getMotorcycles(filters),
   });
 };
 

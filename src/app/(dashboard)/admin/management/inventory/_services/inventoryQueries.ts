@@ -2,9 +2,30 @@
 
 import { db } from "@/lib/db";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
+import { PaginatedResult } from "@/lib/types/paginatedResult";
+import {
+  MotorcycleFiltersSchema,
+  motorcycleFiltersSchema,
+} from "../_types/motorcycleFilterSchema";
 
-const getMotorcycles = async () => {
-  return await db.motorcycle.findMany();
+const getMotorcycles = async (
+  filters: MotorcycleFiltersSchema,
+): Promise<PaginatedResult<MotorcycleSchema>> => {
+  const validatedFilters = motorcycleFiltersSchema.parse(filters);
+
+  const { page, pageSize } = validatedFilters;
+
+  const skip = (page - 1) * pageSize;
+
+  const [data, total] = await Promise.all([
+    db.motorcycle.findMany({
+      skip,
+      take: pageSize,
+    }),
+    db.motorcycle.count(),
+  ]);
+
+  return { data: data as unknown as MotorcycleSchema[], total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
 };
 
 const toDateString = (value: Date | null | undefined): string =>

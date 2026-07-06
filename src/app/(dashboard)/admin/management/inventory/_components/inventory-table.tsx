@@ -12,6 +12,7 @@ import { useInventoryStore } from "../_libs/use-inventory-store";
 import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
 import { useGetMotorcycles } from "../_services/use-inventory-queries";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
+import type { PaginatedResult } from "@/lib/types/paginatedResult";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
@@ -24,6 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Pagination } from "@/components/ui/pagination";
+import { InventoryTableSkeleton } from "./inventory-table-skeleton";
 
 const arrivalStatusLabels: Record<string, string> = {
   NO_INFORMATION: "Sem Informação",
@@ -38,17 +41,22 @@ const registrationStatusLabels: Record<string, string> = {
 };
 
 const InventoryTable = () => {
-  const { updateMotorcycleId, updateInventoryDialogOpen } = useInventoryStore();
+  const {
+    updateMotorcycleId,
+    updateInventoryDialogOpen,
+    motorcycleFilters,
+    updateMotorcycleFiltersPage,
+  } = useInventoryStore();
 
-  const motorcyclesQuery = useGetMotorcycles();
+  const motorcyclesQuery = useGetMotorcycles(motorcycleFilters);
   const deleteMotorcycleMutation = useDeleteMotorcycle();
 
-  const data =
-    (motorcyclesQuery.data as unknown as (MotorcycleSchema & {
-      id: string;
-    })[]) || [];
+  const { data, totalPages } = motorcyclesQuery.data ?? {
+    data: [] as MotorcycleSchema[],
+    totalPages: 0,
+  };
 
-  const columns = useMemo<ColumnDef<MotorcycleSchema & { id: string }>[]>(
+  const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
         accessorKey: "model",
@@ -138,11 +146,7 @@ const InventoryTable = () => {
   });
 
   if (motorcyclesQuery.isLoading) {
-    return (
-      <div className="text-center p-4 text-muted-foreground">
-        Carregando inventário...
-      </div>
-    );
+    return <InventoryTableSkeleton />;
   }
 
   if (data.length === 0) {
@@ -180,6 +184,11 @@ const InventoryTable = () => {
           ))}
         </TableBody>
       </Table>
+      <Pagination
+        currentPage={motorcycleFilters.page}
+        totalPages={totalPages}
+        updatePage={updateMotorcycleFiltersPage}
+      />
     </div>
   );
 };
