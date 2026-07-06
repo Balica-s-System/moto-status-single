@@ -4,17 +4,17 @@ import { useInventoryStore } from "../_libs/use-inventory-store";
 
 const useGetMotorcycles = () => {
   return useQuery({
-    queryKey: ["inventory"],
+    queryKey: ["motorcycle"],
     queryFn: getMotorcycles,
   });
 };
 
 const useMotorcycle = () => {
-  const { selectedMotorcycleId } = useInventoryStore();
+  const { motorcycleId } = useInventoryStore();
   return useQuery({
-    queryKey: ["inventory", { selectedMotorcycleId }],
-    queryFn: () => getMotorcycle(selectedMotorcycleId!),
-    enabled: !!selectedMotorcycleId,
+    queryKey: ["motorcycle", { motorcycleId }],
+    queryFn: () => getMotorcycle(motorcycleId!),
+    enabled: !!motorcycleId,
   });
 };
 
