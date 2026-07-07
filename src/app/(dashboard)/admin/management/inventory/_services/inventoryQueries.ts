@@ -7,25 +7,46 @@ import {
   MotorcycleFiltersSchema,
   motorcycleFiltersSchema,
 } from "../_types/motorcycleFilterSchema";
+import { Prisma } from "$/generated/prisma/browser";
 
 const getMotorcycles = async (
   filters: MotorcycleFiltersSchema,
 ): Promise<PaginatedResult<MotorcycleSchema>> => {
   const validatedFilters = motorcycleFiltersSchema.parse(filters);
 
-  const { page, pageSize } = validatedFilters;
+  const {
+    searchTerm,
+    page = 1,
+    pageSize = 10,
+    sortBy = "chassi",
+    sortOrder = "desc",
+  } = validatedFilters || {};
+
+  const where: Prisma.MotorcycleWhereInput = {};
+
+  if (searchTerm) {
+    where.model = { contains: searchTerm };
+  }
 
   const skip = (page - 1) * pageSize;
 
   const [data, total] = await Promise.all([
     db.motorcycle.findMany({
+      where,
+      orderBy: { [sortBy]: sortOrder },
       skip,
       take: pageSize,
     }),
-    db.motorcycle.count(),
+    db.motorcycle.count({ where }),
   ]);
 
-  return { data: data as unknown as MotorcycleSchema[], total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
+  return {
+    data: data as unknown as MotorcycleSchema[],
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize),
+  };
 };
 
 const toDateString = (value: Date | null | undefined): string =>

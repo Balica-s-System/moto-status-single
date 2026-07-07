@@ -12,7 +12,6 @@ import { useInventoryStore } from "../_libs/use-inventory-store";
 import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
 import { useGetMotorcycles } from "../_services/use-inventory-queries";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
-import type { PaginatedResult } from "@/lib/types/paginatedResult";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash } from "lucide-react";
 import { alert } from "@/lib/use-global-store";

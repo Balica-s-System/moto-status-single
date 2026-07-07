@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 const motorcycleFiltersSchema = z.object({
+  searchTerm: z.string(),
+  sortBy: z.enum(["chassi", "model", "forecastArrival"]),
+  sortOrder: z.enum(["asc", "desc"]).optional(),
+
   page: z.number(),
   pageSize: z.number().max(100),
 });
@@ -8,6 +12,9 @@ const motorcycleFiltersSchema = z.object({
 type MotorcycleFiltersSchema = z.infer<typeof motorcycleFiltersSchema>;
 
 const motorcycleFiltersDefaultValues: MotorcycleFiltersSchema = {
+  searchTerm: "",
+  sortBy: "chassi",
+  sortOrder: "desc",
   pageSize: 12,
   page: 1,
 };

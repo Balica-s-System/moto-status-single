@@ -8,12 +8,20 @@ type State = {
   selectedMotorcycleId: string | null;
   inventoryDialogOpen: boolean;
   motorcycleFilters: MotorcycleFiltersSchema;
+  motorcycleFiltersDrawerOpen: boolean;
 };
 
 type Actions = {
   updateMotorcycleId: (id: State["selectedMotorcycleId"]) => void;
   updateInventoryDialogOpen: (is: State["inventoryDialogOpen"]) => void;
+  updateMotorcycleFilters: (filters: State["motorcycleFilters"]) => void;
   updateMotorcycleFiltersPage: (action: "next" | "prev" | number) => void;
+  updateMotorcycleFiltersDrawerOpen: (
+    is: State["motorcycleFiltersDrawerOpen"],
+  ) => void;
+  updateMotorcycleSearchTerm: (
+    str: State["motorcycleFilters"]["searchTerm"],
+  ) => void;
 };
 
 type Store = State & Actions;
@@ -30,7 +38,16 @@ const useInventoryStore = createStore<Store>(
       set((state) => {
         state.inventoryDialogOpen = is;
       }),
+    updateMotorcycleFilters: (filters) =>
+      set((state) => {
+        state.motorcycleFilters = filters;
+      }),
+    updateMotorcycleFiltersDrawerOpen: (is) =>
+      set((state) => {
+        state.motorcycleFiltersDrawerOpen = is;
+      }),
     motorcycleFilters: motorcycleFiltersDefaultValues,
+    motorcycleFiltersDrawerOpen: false,
     updateMotorcycleFiltersPage: (action) =>
       set((state) => {
         const currentPage = state.motorcycleFilters.page;
@@ -46,9 +63,14 @@ const useInventoryStore = createStore<Store>(
 
         state.motorcycleFilters.page = newPage;
       }),
+    updateMotorcycleSearchTerm: (searchTerm) =>
+      set((state) => {
+        state.motorcycleFilters.searchTerm = searchTerm;
+      }),
   }),
   {
     name: "inventory-store",
+    excludeFromPersist: ["motorcycleFilters"],
   },
 );
 
