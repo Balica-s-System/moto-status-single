@@ -26,7 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
             <TabsTrigger value="clients" asChild>
               <Link href="/admin/management/clients">
                 <Users2Icon />
-                Clients
+                Clientes
               </Link>
             </TabsTrigger>
             <TabsTrigger value="inventory" asChild>
