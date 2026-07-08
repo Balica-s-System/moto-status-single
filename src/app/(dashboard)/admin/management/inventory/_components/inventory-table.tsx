@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { format } from "date-fns";
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,7 +14,7 @@ import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
 import { useGetMotorcycles } from "../_services/use-inventory-queries";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
 
 import {
@@ -43,6 +44,7 @@ const InventoryTable = () => {
   const {
     updateMotorcycleId,
     updateInventoryDialogOpen,
+    updateInventoryPreviewOpen,
     motorcycleFilters,
     updateMotorcycleFiltersPage,
   } = useInventoryStore();
@@ -73,7 +75,7 @@ const InventoryTable = () => {
         header: "Previsão de Chegada",
         cell: ({ row }) => {
           const date = row.original.forecastArrival;
-          return date ? new Date(date).toLocaleDateString("pt-BR") : "-";
+          return date ? format(new Date(date), "dd/MM/yyyy") : "-";
         },
       },
       {
@@ -97,7 +99,7 @@ const InventoryTable = () => {
         header: "Data Emplacamento",
         cell: ({ row }) => {
           const date = row.original.registrationDate;
-          return date ? new Date(date).toLocaleDateString("pt-BR") : "-";
+          return date ? format(new Date(date), "dd/MM/yyyy") : "-";
         },
       },
       {
@@ -107,6 +109,17 @@ const InventoryTable = () => {
           const item = row.original;
           return (
             <div className="flex gap-2 justify-end">
+              <Button
+                className="size-8"
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  updateMotorcycleId(item.id);
+                  updateInventoryPreviewOpen(true);
+                }}
+              >
+                <Eye className="size-4" />
+              </Button>
               <Button
                 className="size-8"
                 variant="ghost"
@@ -135,7 +148,7 @@ const InventoryTable = () => {
         },
       },
     ],
-    [updateMotorcycleId, updateInventoryDialogOpen, deleteMotorcycleMutation],
+    [updateMotorcycleId, updateInventoryDialogOpen, updateInventoryPreviewOpen, deleteMotorcycleMutation],
   );
 
   const table = useReactTable({

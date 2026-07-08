@@ -1,5 +1,6 @@
 "use server";
 
+import { format } from "date-fns";
 import { db } from "@/lib/db";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
 import { PaginatedResult } from "@/lib/types/paginatedResult";
@@ -58,7 +59,7 @@ const getMotorcycles = async (
 };
 
 const toDateString = (value: Date | null | undefined): string =>
-  value ? value.toISOString().split("T")[0] : "";
+  value ? format(value, "yyyy-MM-dd") : "";
 
 const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
   const res = await db.motorcycle.findFirst({

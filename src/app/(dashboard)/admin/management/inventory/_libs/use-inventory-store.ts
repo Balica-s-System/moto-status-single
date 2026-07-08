@@ -7,6 +7,7 @@ import {
 type State = {
   selectedMotorcycleId: string | null;
   inventoryDialogOpen: boolean;
+  inventoryPreviewOpen: boolean;
   motorcycleFilters: MotorcycleFiltersSchema;
   motorcycleFiltersDrawerOpen: boolean;
 };
@@ -14,6 +15,7 @@ type State = {
 type Actions = {
   updateMotorcycleId: (id: State["selectedMotorcycleId"]) => void;
   updateInventoryDialogOpen: (is: State["inventoryDialogOpen"]) => void;
+  updateInventoryPreviewOpen: (is: State["inventoryPreviewOpen"]) => void;
   updateMotorcycleFilters: (filters: State["motorcycleFilters"]) => void;
   updateMotorcycleFiltersPage: (action: "next" | "prev" | number) => void;
   updateMotorcycleFiltersDrawerOpen: (
@@ -37,6 +39,11 @@ const useInventoryStore = createStore<Store>(
     updateInventoryDialogOpen: (is) =>
       set((state) => {
         state.inventoryDialogOpen = is;
+      }),
+    inventoryPreviewOpen: false,
+    updateInventoryPreviewOpen: (is) =>
+      set((state) => {
+        state.inventoryPreviewOpen = is;
       }),
     updateMotorcycleFilters: (filters) =>
       set((state) => {

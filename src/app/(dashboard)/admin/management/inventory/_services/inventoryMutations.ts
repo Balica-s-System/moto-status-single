@@ -1,5 +1,6 @@
 "use server";
 
+import { parse } from "date-fns";
 import { db } from "@/lib/db";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
 import { executeAction } from "@/lib/executeAction";
@@ -10,7 +11,7 @@ const deleteMotorcycle = async (id: string) => {
 };
 
 const toDateOrNull = (value: string | null | undefined): Date | null =>
-  value ? new Date(value) : null;
+  value ? parse(value, "yyyy-MM-dd", new Date()) : null;
 
 const createMotorcycle = async (data: MotorcycleSchema) => {
   await executeAction({
@@ -40,6 +41,11 @@ const updateMotorcycle = async (data: MotorcycleSchema) => {
           data: {
             chassi: data.chassi,
             model: data.model,
+            forecastArrival: toDateOrNull(data.forecastArrival),
+            forecastArrivalStatus: data.forecastArrivalStatus as ArrivalStatus,
+            registrationStatus:
+              data.registrationStatus as RegistrationStatus | null,
+            registrationDate: toDateOrNull(data.registrationDate),
           },
         }),
     });
