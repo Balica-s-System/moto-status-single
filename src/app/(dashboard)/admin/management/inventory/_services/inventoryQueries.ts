@@ -18,6 +18,7 @@ const getMotorcycles = async (
     searchTerm,
     page = 1,
     pageSize = 10,
+    forecastArrivalStatus = "",
     sortBy = "chassi",
     sortOrder = "desc",
   } = validatedFilters || {};
@@ -28,6 +29,10 @@ const getMotorcycles = async (
     where.model = { contains: searchTerm };
   }
 
+  if (forecastArrivalStatus) {
+    where.forecastArrivalStatus = forecastArrivalStatus;
+  }
+  
   const skip = (page - 1) * pageSize;
 
   const [data, total] = await Promise.all([

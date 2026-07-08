@@ -102,21 +102,32 @@ const InventoryFiltersDrawer = () => {
             <div className="space-y-2 p-4">
               <div className="flex flex-wrap gap-2">
                 <ControlledSelect<MotorcycleFiltersSchema>
-                  label="Sort By"
+                  label="Ordernar Por"
                   name="sortBy"
                   options={[
-                    { label: "chassi", value: "chassi" },
-                    { label: "modelo", value: "model" },
-                    { label: "previsão de chegada", value: "forecastArrival" },
+                    { label: "Chassi", value: "chassi" },
+                    { label: "Modelo", value: "model" },
+                    { label: "Previsão de Chegada", value: "forecastArrival" },
                   ]}
                 />
 
                 <ControlledSelect<MotorcycleFiltersSchema>
-                  label="Sort Order"
+                  label="Ordernar"
                   name="sortOrder"
                   options={[
-                    { label: "Ascending", value: "asc" },
-                    { label: "Descending", value: "desc" },
+                    { label: "Ascendente", value: "asc" },
+                    { label: "Decrescente", value: "desc" },
+                  ]}
+
+/>
+                <ControlledSelect<MotorcycleFiltersSchema>
+                  label="Status da Chegada"
+                  name="forecastArrivalStatus"
+                  placeholder="Escolha um status"
+                  options={[
+                    { label: "Entregue", value: "ARRIVED" },
+                    { label: "Atrasado", value: "DELAYED" },
+                    { label: "Sem Informação", value: "NO_INFORMATION" },
                   ]}
                 />
               </div>
