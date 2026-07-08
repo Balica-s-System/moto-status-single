@@ -8,6 +8,7 @@ import {
   flexRender,
   ColumnDef,
 } from "@tanstack/react-table";
+import { ClickToCopy } from "@/components/click-to-copy";
 import { NoItemsFound } from "@/components/no-items-found";
 import { useInventoryStore } from "../_libs/use-inventory-store";
 import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
@@ -69,6 +70,11 @@ const InventoryTable = () => {
       {
         accessorKey: "chassi",
         header: "Chassi",
+        cell: ({ row }) => (
+          <ClickToCopy text={row.original.chassi}>
+            <span className="font-mono text-xs">{row.original.chassi}</span>
+          </ClickToCopy>
+        ),
       },
       {
         accessorKey: "forecastArrival",

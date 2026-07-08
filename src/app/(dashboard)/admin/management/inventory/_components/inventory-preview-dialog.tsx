@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { ClickToCopy } from "@/components/click-to-copy";
 import { useInventoryStore } from "../_libs/use-inventory-store";
 import { useMotorcycle } from "../_services/use-inventory-queries";
 import {
@@ -82,7 +83,9 @@ const InventoryPreviewDialog = () => {
 
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Chassi</p>
-              <p className="font-medium font-mono text-xs">{item.chassi}</p>
+              <ClickToCopy text={item.chassi}>
+                <span className="font-medium font-mono text-xs">{item.chassi}</span>
+              </ClickToCopy>
             </div>
 
             <div className="space-y-1">
