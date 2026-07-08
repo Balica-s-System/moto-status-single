@@ -53,6 +53,11 @@ const InventoryFiltersDrawer = () => {
   const searchTerm = useWatch({ control: form.control, name: "searchTerm" });
   const debouncedSearchTerm = useDebounce(searchTerm, 400);
 
+  const resetSearchTerm = () => {
+    form.setValue("searchTerm", "");
+    updateMotorcycleSearchTerm("");
+  }
+
   useEffect(() => {
     updateMotorcycleSearchTerm(debouncedSearchTerm);
   }, [debouncedSearchTerm, updateMotorcycleSearchTerm]);
@@ -88,7 +93,7 @@ const InventoryFiltersDrawer = () => {
               type="button"
               size="icon"
               variant="ghost"
-              onClick={() => form.resetField("searchTerm")}
+              onClick={resetSearchTerm}
               aria-label="Limpar busca"
               title="Limpar busca"
             >
@@ -98,16 +103,16 @@ const InventoryFiltersDrawer = () => {
           <DrawerTrigger asChild>
             <Button variant="outline" badge={areFiltersModified}>
               <FilterIcon />
-              Filters
+              Filtros
             </Button>
           </DrawerTrigger>
         </div>
         <form>
           <DrawerContent>
             <DrawerHeader className="text-left">
-              <DrawerTitle>Filters</DrawerTitle>
+              <DrawerTitle>Filtros</DrawerTitle>
               <DrawerDescription>
-                Customize your motorcycle search criteria
+                Personalize seus critérios de busca
               </DrawerDescription>
             </DrawerHeader>
 
@@ -146,7 +151,7 @@ const InventoryFiltersDrawer = () => {
             </div>
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Cancelar</Button>
               </DrawerClose>
               <Button
                 type="button"
@@ -155,10 +160,10 @@ const InventoryFiltersDrawer = () => {
                   form.reset(motorcycleFiltersDefaultValues);
                 }}
               >
-                Reset
+                Redefinir
               </Button>
               <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-                Apply Filters
+                Aplicar Filtros
               </Button>
             </DrawerFooter>
           </DrawerContent>

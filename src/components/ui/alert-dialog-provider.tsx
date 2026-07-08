@@ -34,19 +34,19 @@ const AlertDialogProvider = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {alertConfig.title || "Confirmation Required"}
+            {alertConfig.title || "Confirmação Necessária"}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {alertConfig.description ||
-              "Are you sure you want to perform this action?"}
+              "Tem certeza de que deseja realizar esta ação?"}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={handleCancel}>
-            {alertConfig.cancelLabel || "Cancel"}
+            {alertConfig.cancelLabel || "Cancelar"}
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm}>
-            {alertConfig.confirmLabel || "Continue"}
+            {alertConfig.confirmLabel || "Continuar"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

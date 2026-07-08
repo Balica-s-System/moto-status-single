@@ -15,7 +15,7 @@ const useDeleteMotorcycle = () => {
       await deleteMotorcycle(id);
     },
     onSuccess: () => {
-      toast.success("Motorcycle deleted successfully.");
+      toast.success("Motocicleta excluída com sucesso.");
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
       });
@@ -31,7 +31,7 @@ const useCreateMotorcycle = () => {
       await createMotorcycle(data);
     },
     onSuccess: () => {
-      toast.success("Motorcycle created successfully.");
+      toast.success("Motocicleta criada com sucesso.");
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
       });
@@ -47,7 +47,7 @@ const useUpdateMotorcycle = () => {
       await updateMotorcycle(data);
     },
     onSuccess: () => {
-      toast.success("Motorcycle updated successfully.");
+      toast.success("Motocicleta atualizada com sucesso.");
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
       });
