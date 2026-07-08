@@ -26,7 +26,10 @@ const getMotorcycles = async (
   const where: Prisma.MotorcycleWhereInput = {};
 
   if (searchTerm) {
-    where.model = { contains: searchTerm };
+    where.OR = [
+      { model: { contains: searchTerm } },
+      { chassi: { contains: searchTerm } },
+    ];
   }
 
   if (forecastArrivalStatus) {

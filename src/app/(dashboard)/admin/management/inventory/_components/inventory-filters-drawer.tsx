@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/drawer";
 import { ControlledInput } from "@/components/ui/controlled-input";
 import { Button } from "@/components/ui/button";
-import { FilterIcon } from "lucide-react";
+import { BrushCleaning, FilterIcon, X } from "lucide-react";
 import { ControlledSelect } from "@/components/ui/controlled-select";
 
 const InventoryFiltersDrawer = () => {
@@ -77,12 +77,24 @@ const InventoryFiltersDrawer = () => {
     >
       <FormProvider {...form}>
         <div className="flex gap-2">
-          <ControlledInput<MotorcycleFiltersSchema>
-            name="searchTerm"
-            placeholder="Quick search"
-            containerClassName="max-w-48"
-          />
+          <div className="flex min-w-82 items-center gap-2">
+            <ControlledInput<MotorcycleFiltersSchema>
+              name="searchTerm"
+              placeholder="Pesquise por Modelo ou Chassi"
+              className="flex-1"
+            />
 
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              onClick={() => form.resetField("searchTerm")}
+              aria-label="Limpar busca"
+              title="Limpar busca"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
           <DrawerTrigger asChild>
             <Button variant="outline" badge={areFiltersModified}>
               <FilterIcon />
@@ -119,7 +131,7 @@ const InventoryFiltersDrawer = () => {
                     { label: "Decrescente", value: "desc" },
                   ]}
 
-/>
+                />
                 <ControlledSelect<MotorcycleFiltersSchema>
                   label="Status da Chegada"
                   name="forecastArrivalStatus"

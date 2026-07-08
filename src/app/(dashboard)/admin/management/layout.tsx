@@ -19,7 +19,7 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl p-6">
+    <div className="mx-auto max-w-7xl px-6">
       <div className="mb-6">
         <Tabs value={getDefaultTab()}>
           <TabsList>
