@@ -10,10 +10,10 @@ import {
 } from "@tanstack/react-table";
 import { ClickToCopy } from "@/components/click-to-copy";
 import { NoItemsFound } from "@/components/no-items-found";
-import { useInventoryStore } from "../_libs/use-inventory-store";
-import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
-import { useGetMotorcycles } from "../_services/use-inventory-queries";
-import { MotorcycleSchema } from "../_types/motorcycleSchema";
+import { useClientStore } from "../_libs/use-clients-store";
+import { useDeleteClient } from "../_services/use-client-mutations";
+import { useGetClients } from "../_services/use-client-queries";
+import { ClientSchema } from "../_types/clientSchema";
 import { Button } from "@/components/ui/button";
 import { Edit, Eye, Trash } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
@@ -27,98 +27,76 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination";
-import { InventoryTableSkeleton } from "./inventory-table-skeleton";
+import { ClientsTableSkeleton } from "./clients-table-skeleton";
+import { formatDocument } from "@/lib/format";
 
-const arrivalStatusLabels: Record<string, string> = {
-  NO_INFORMATION: "Sem Informação",
-  DELAYED: "Atrasado",
-  ARRIVED: "Entregue",
-};
-
-const registrationStatusLabels: Record<string, string> = {
-  NO_PLATE: "Sem Placa",
-  PLATING: "Em Emplacamento",
-  PLATED: "Emplacada",
-};
-
-const InventoryTable = () => {
+const ClientsTable = () => {
   const {
-    updateMotorcycleId,
-    updateInventoryDialogOpen,
-    updateInventoryPreviewOpen,
-    motorcycleFilters,
-    updateMotorcycleFiltersPage,
-  } = useInventoryStore();
+    updateClientId,
+    updateClientDialogOpen,
+    updateClientPreviewOpen,
+    clientFilters,
+    updateClientFiltersPage,
+  } = useClientStore();
 
-  const motorcyclesQuery = useGetMotorcycles(motorcycleFilters);
-  const deleteMotorcycleMutation = useDeleteMotorcycle();
+  const clientsQuery = useGetClients(clientFilters);
+  const deleteClientMutation = useDeleteClient();
 
-  const { data, totalPages } = motorcyclesQuery.data ?? {
-    data: [] as MotorcycleSchema[],
+  const { data, totalPages } = clientsQuery.data ?? {
+    data: [] as ClientSchema[],
     totalPages: 0,
   };
+
+  // get the extra fields from the API response
+  const rows = useMemo(() => {
+    if (!clientsQuery.data) return [];
+    return clientsQuery.data.data.map((item: any) => ({
+      ...item,
+      _motorcycles: item.motorcycles ?? [],
+      _motorcycleCount: (item.motorcycles ?? []).length,
+    }));
+  }, [clientsQuery.data]);
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
-        accessorKey: "model",
-        header: "Modelo",
+        accessorKey: "name",
+        header: "Nome",
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.model}</span>
+          <span className="font-medium">{row.original.name}</span>
         ),
       },
       {
-        accessorKey: "chassi",
-        header: "Chassi",
+        accessorKey: "cpf",
+        header: "CPF / CNPJ",
         cell: ({ row }) => (
-          <ClickToCopy text={row.original.chassi}>
-            <span className="font-mono text-xs">{row.original.chassi}</span>
+          <ClickToCopy text={row.original.cpf}>
+            <span className="font-mono text-xs">{formatDocument(row.original.cpf)}</span>
           </ClickToCopy>
         ),
       },
       {
-        accessorKey: "forecastArrival",
-        header: "Previsão de Chegada",
+        accessorKey: "city",
+        header: "Cidade",
+      },
+      {
+        accessorKey: "sellersName",
+        header: "Vendedor",
+      },
+      {
+        accessorKey: "billingDate",
+        header: "Data Fat.",
         cell: ({ row }) => {
-          const date = row.original.forecastArrival;
+          const date = row.original.billingDate;
           return date ? format(new Date(date), "dd/MM/yyyy") : "-";
         },
       },
       {
-        accessorKey: "forecastArrivalStatus",
-        header: "Status da Chegada",
-        cell: ({ row }) => {
-          const status = row.original.forecastArrivalStatus;
-          return arrivalStatusLabels[status] || status;
-        },
-      },
-      {
-        accessorKey: "registrationStatus",
-        header: "Status Emplacamento",
-        cell: ({ row }) => {
-          const status = row.original.registrationStatus;
-          return status ? registrationStatusLabels[status] || status : "-";
-        },
-      },
-      {
-        accessorKey: "registrationDate",
-        header: "Data Emplacamento",
-        cell: ({ row }) => {
-          const date = row.original.registrationDate;
-          return date ? format(new Date(date), "dd/MM/yyyy") : "-";
-        },
-      },
-      {
-        accessorKey: "client",
-        header: "Cliente",
-        cell: ({ row }) => {
-          const client = row.original.client;
-          return client ? (
-            <span className="font-medium">{client.name}</span>
-          ) : (
-            <span className="text-muted-foreground">-</span>
-          );
-        },
+        accessorKey: "_motorcycleCount",
+        header: "Motos",
+        cell: ({ row }) => (
+          <span className="text-center block">{row.original._motorcycleCount}</span>
+        ),
       },
       {
         id: "actions",
@@ -132,8 +110,8 @@ const InventoryTable = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => {
-                  updateMotorcycleId(item.id);
-                  updateInventoryPreviewOpen(true);
+                  updateClientId(item.id);
+                  updateClientPreviewOpen(true);
                 }}
               >
                 <Eye className="size-4" />
@@ -143,8 +121,8 @@ const InventoryTable = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => {
-                  updateMotorcycleId(item.id);
-                  updateInventoryDialogOpen(true);
+                  updateClientId(item.id);
+                  updateClientDialogOpen(true);
                 }}
               >
                 <Edit className="size-4" />
@@ -155,7 +133,7 @@ const InventoryTable = () => {
                 size="icon"
                 onClick={() => {
                   alert({
-                    onConfirm: () => deleteMotorcycleMutation.mutate(item.id),
+                    onConfirm: () => deleteClientMutation.mutate(item.id),
                   });
                 }}
               >
@@ -166,21 +144,21 @@ const InventoryTable = () => {
         },
       },
     ],
-    [updateMotorcycleId, updateInventoryDialogOpen, updateInventoryPreviewOpen, deleteMotorcycleMutation],
+    [updateClientId, updateClientDialogOpen, updateClientPreviewOpen, deleteClientMutation],
   );
 
   const table = useReactTable({
-    data,
+    data: rows,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (motorcyclesQuery.isLoading) {
-    return <InventoryTableSkeleton />;
+  if (clientsQuery.isLoading) {
+    return <ClientsTableSkeleton />;
   }
 
-  if (data.length === 0) {
-    return <NoItemsFound onClick={() => updateInventoryDialogOpen(true)} />;
+  if (rows.length === 0) {
+    return <NoItemsFound onClick={() => updateClientDialogOpen(true)} />;
   }
 
   return (
@@ -215,12 +193,12 @@ const InventoryTable = () => {
         </TableBody>
       </Table>
       <Pagination
-        currentPage={motorcycleFilters.page}
+        currentPage={clientFilters.page}
         totalPages={totalPages}
-        updatePage={updateMotorcycleFiltersPage}
+        updatePage={updateClientFiltersPage}
       />
     </div>
   );
 };
 
-export default InventoryTable;
+export default ClientsTable;

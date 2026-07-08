@@ -39,12 +39,13 @@ const getMotorcycles = async (
   
   const skip = (page - 1) * pageSize;
 
-  const [data, total] = await Promise.all([
+    const [data, total] = await Promise.all([
     db.motorcycle.findMany({
       where,
       orderBy: { [sortBy]: sortOrder },
       skip,
       take: pageSize,
+      include: { client: { select: { id: true, name: true } } },
     }),
     db.motorcycle.count({ where }),
   ]);

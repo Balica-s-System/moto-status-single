@@ -7,6 +7,7 @@ const patterns = {
   minimumOneSpecialCharacter: /[@$!%*#?&]/,
   minEightCharacters: /^.{8,}$/,
   chassi: /^[A-HJ-NPR-Z0-9]{17}$/i,
+  document: /^\d{11}$|^\d{14}$/,
 };
 
 export { patterns };
