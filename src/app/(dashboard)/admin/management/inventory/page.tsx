@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import InventoryTable from "./_components/inventory-table";
 import { InventoryFiltersDrawer } from "./_components/inventory-filters-drawer";
 import InventoryFormDialog from "./_components/inventory-form-dialog";
+import { InventoryPreviewDialog } from "./_components/inventory-preview-dialog";
 
 export const metadata: Metadata = {
   title: "Estoque | Auge Motos",
@@ -16,6 +17,7 @@ const Page = () => {
       </div>
       <InventoryFiltersDrawer />
       <InventoryTable />
+      <InventoryPreviewDialog />
     </div>
   );
 };

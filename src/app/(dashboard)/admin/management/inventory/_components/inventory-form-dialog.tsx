@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { ControlledInput } from "@/components/ui/controlled-input";
 import { ControlledSelect } from "@/components/ui/controlled-select";
+import { ControlledDatePicker } from "@/components/ui/controlled-date-picker";
 import { ValueLabel } from "@/lib/types/valueLabel";
 
 type InventoryFormDialogProps = {
@@ -139,10 +140,10 @@ const InventoryFormDialog = ({ smallTrigger }: InventoryFormDialogProps) => {
               </div>
 
               <div className="col-span-1">
-                <ControlledInput<MotorcycleSchema>
+                <ControlledDatePicker<MotorcycleSchema>
                   name="forecastArrival"
                   label="Previsão de Chegada"
-                  type="date"
+                  placeholder="Selecione a data"
                 />
               </div>
 
@@ -165,10 +166,10 @@ const InventoryFormDialog = ({ smallTrigger }: InventoryFormDialogProps) => {
               </div>
 
               <div className="col-span-1">
-                <ControlledInput<MotorcycleSchema>
+                <ControlledDatePicker<MotorcycleSchema>
                   name="registrationDate"
                   label="Data do Emplacamento"
-                  type="date"
+                  placeholder="Selecione a data"
                 />
               </div>
             </div>
