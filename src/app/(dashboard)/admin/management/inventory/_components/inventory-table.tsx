@@ -152,7 +152,8 @@ const InventoryTable = () => {
                 className="size-8"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   updateMotorcycleId(item.id);
                   updateInventoryPreviewOpen(true);
                 }}
@@ -163,7 +164,8 @@ const InventoryTable = () => {
                 className="size-8"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   updateMotorcycleId(item.id);
                   updateInventoryDialogOpen(true);
                 }}
@@ -174,7 +176,8 @@ const InventoryTable = () => {
                 className="size-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   alert({
                     onConfirm: () => deleteMotorcycleMutation.mutate(item.id),
                   });

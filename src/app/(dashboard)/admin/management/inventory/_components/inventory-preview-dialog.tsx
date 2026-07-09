@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Printer } from "lucide-react";
+import { Loading } from "@/app/(dashboard)/_components/loading";
 
 const arrivalStatusLabels: Record<string, string> = {
   NO_INFORMATION: "Sem Informação",
@@ -125,9 +126,7 @@ const InventoryPreviewDialog = () => {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center py-8 text-muted-foreground">
-            Carregando...
-          </div>
+          < Loading />
         )}
 
         <DialogFooter>

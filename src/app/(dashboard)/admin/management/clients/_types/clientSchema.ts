@@ -1,10 +1,15 @@
 import { patterns } from "@/lib/constants";
-import { regexSchema, requiredStringSchema } from "@/lib/zodSchema";
+import { requiredStringSchema } from "@/lib/zodSchema";
 import { z } from "zod/v3";
 
 const baseFields = {
   name: requiredStringSchema,
-  cpf: regexSchema(patterns.document, "CPF/CNPJ inválido. Deve conter 11 (CPF) ou 14 (CNPJ) dígitos."),
+  cpf: z
+    .string()
+    .refine(
+      (val) => patterns.document.test(val.replace(/\D/g, "")),
+      "CPF/CNPJ inválido. Deve conter 11 (CPF) ou 14 (CNPJ) dígitos.",
+    ),
   city: requiredStringSchema,
   sellersName: requiredStringSchema,
   billingDate: z.string().optional().nullable(),

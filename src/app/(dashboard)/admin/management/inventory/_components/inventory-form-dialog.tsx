@@ -28,6 +28,7 @@ import { ControlledInput } from "@/components/ui/controlled-input";
 import { ControlledSelect } from "@/components/ui/controlled-select";
 import { ControlledDatePicker } from "@/components/ui/controlled-date-picker";
 import { ValueLabel } from "@/lib/types/valueLabel";
+import { Loading } from "@/app/(dashboard)/_components/loading";
 
 type InventoryFormDialogProps = {
   smallTrigger?: boolean;
@@ -120,66 +121,70 @@ const InventoryFormDialog = ({ smallTrigger }: InventoryFormDialogProps) => {
               : "Criar nova Motocicleta"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormProvider {...form}>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <ControlledInput<MotorcycleSchema>
-                  name="model"
-                  label="Modelo"
-                  placeholder="Ex: Honda CB 500X"
-                />
-              </div>
+        {selectedMotorcycleId && motorcycleQuery.isLoading ? (
+          <Loading />
+        ) : (
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormProvider {...form}>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <ControlledInput<MotorcycleSchema>
+                    name="model"
+                    label="Modelo"
+                    placeholder="Ex: Honda CB 500X"
+                  />
+                </div>
 
-              <div className="col-span-2">
-                <ControlledInput<MotorcycleSchema>
-                  name="chassi"
-                  label="Chassi"
-                  placeholder="Digite o número do chassi"
-                />
-              </div>
+                <div className="col-span-2">
+                  <ControlledInput<MotorcycleSchema>
+                    name="chassi"
+                    label="Chassi"
+                    placeholder="Digite o número do chassi"
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledDatePicker<MotorcycleSchema>
-                  name="forecastArrival"
-                  label="Previsão de Chegada"
-                  placeholder="Selecione a data"
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledDatePicker<MotorcycleSchema>
+                    name="forecastArrival"
+                    label="Previsão de Chegada"
+                    placeholder="Selecione a data"
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledSelect<MotorcycleSchema>
-                  name="forecastArrivalStatus"
-                  label="Status da Chegada"
-                  placeholder="Selecione o status"
-                  options={arrivalStatusOptions}
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledSelect<MotorcycleSchema>
+                    name="forecastArrivalStatus"
+                    label="Status da Chegada"
+                    placeholder="Selecione o status"
+                    options={arrivalStatusOptions}
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledSelect<MotorcycleSchema>
-                  name="registrationStatus"
-                  label="Status do Emplacamento"
-                  placeholder="Selecione o status"
-                  options={registrationStatusOptions}
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledSelect<MotorcycleSchema>
+                    name="registrationStatus"
+                    label="Status do Emplacamento"
+                    placeholder="Selecione o status"
+                    options={registrationStatusOptions}
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledDatePicker<MotorcycleSchema>
-                  name="registrationDate"
-                  label="Data do Emplacamento"
-                  placeholder="Selecione a data"
-                />
+                <div className="col-span-1">
+                  <ControlledDatePicker<MotorcycleSchema>
+                    name="registrationDate"
+                    label="Data do Emplacamento"
+                    placeholder="Selecione a data"
+                  />
+                </div>
               </div>
-            </div>
-          </FormProvider>
-          <DialogFooter>
-            <Button type="submit" isLoading={isPending}>
-              {!!selectedMotorcycleId ? "Editar" : "Criar"} Motocicleta
-            </Button>
-          </DialogFooter>
-        </form>
+            </FormProvider>
+            <DialogFooter>
+              <Button type="submit" isLoading={isPending}>
+                {!!selectedMotorcycleId ? "Editar" : "Criar"} Motocicleta
+              </Button>
+            </DialogFooter>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );
