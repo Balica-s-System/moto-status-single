@@ -28,7 +28,7 @@ const Loading = () => {
 
         {/* Brilho passando */}
         <motion.div
-          className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-white/40 to-transparent dark:via-white/20 blur-sm"
+          className="absolute inset-y-0 w-16 bg-linear-to-r from-transparent via-white/40 to-transparent dark:via-white/20 blur-sm"
           animate={{
             x: ["-120%", "220%"],
           }}
@@ -41,6 +41,6 @@ const Loading = () => {
       </div>
     </div>
   );
-}
+};
 
-export { Loading }
+export { Loading };

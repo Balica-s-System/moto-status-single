@@ -15,7 +15,18 @@ import { useDeleteClient } from "../_services/use-client-mutations";
 import { useGetClients } from "../_services/use-client-queries";
 import { ClientSchema } from "../_types/clientSchema";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Edit, Eye, Trash, User, IdCard, MapPin, UserCheck, Calendar, Bike } from "lucide-react";
+import {
+  ChevronRight,
+  Edit,
+  Eye,
+  Trash,
+  User,
+  IdCard,
+  MapPin,
+  UserCheck,
+  Calendar,
+  Bike,
+} from "lucide-react";
 import { alert } from "@/lib/use-global-store";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +59,6 @@ const ClientsTable = () => {
     totalPages: 0,
   };
 
-  // get the extra fields from the API response
   const rows = useMemo(() => {
     if (!clientsQuery.data) return [];
     return clientsQuery.data.data.map((item: any) => ({
@@ -123,7 +133,9 @@ const ClientsTable = () => {
         ),
         cell: ({ row }) => (
           <ClickToCopy text={row.original.cpf}>
-            <span className="font-mono text-xs">{formatDocument(row.original.cpf)}</span>
+            <span className="font-mono text-xs">
+              {formatDocument(row.original.cpf)}
+            </span>
           </ClickToCopy>
         ),
       },
@@ -167,7 +179,9 @@ const ClientsTable = () => {
           </span>
         ),
         cell: ({ row }) => (
-          <span className="text-center block">{row.original._motorcycleCount}</span>
+          <span className="text-center block">
+            {row.original._motorcycleCount}
+          </span>
         ),
       },
       {
@@ -181,7 +195,8 @@ const ClientsTable = () => {
                 className="size-8"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   updateClientId(item.id);
                   updateClientPreviewOpen(true);
                 }}
@@ -192,7 +207,8 @@ const ClientsTable = () => {
                 className="size-8"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   updateClientId(item.id);
                   updateClientDialogOpen(true);
                 }}
@@ -203,7 +219,8 @@ const ClientsTable = () => {
                 className="size-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                 variant="ghost"
                 size="icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   alert({
                     onConfirm: () => deleteClientMutation.mutate(item.id),
                   });
@@ -216,7 +233,13 @@ const ClientsTable = () => {
         },
       },
     ],
-    [updateClientId, updateClientDialogOpen, updateClientPreviewOpen, deleteClientMutation, openRows],
+    [
+      updateClientId,
+      updateClientDialogOpen,
+      updateClientPreviewOpen,
+      deleteClientMutation,
+      openRows,
+    ],
   );
 
   const table = useReactTable({
