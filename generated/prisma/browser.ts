@@ -27,3 +27,8 @@ export type Client = Prisma.ClientModel
  * 
  */
 export type Motorcycle = Prisma.MotorcycleModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel

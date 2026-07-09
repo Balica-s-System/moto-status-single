@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { BoxIcon, ChevronDown, ChevronLeft, LogOut, Menu, Users2Icon } from "lucide-react";
+import { BoxIcon, ChevronDown, ChevronLeft, LogOut, Menu, ShieldIcon, Users2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Collapsible } from "radix-ui";
 import { ReactNode, useState } from "react";
@@ -34,6 +34,11 @@ const ROUTE_GROUPS: RouteGroup[] = [
         href: "/admin/management/inventory",
         label: "Estoque",
         icon: <BoxIcon  className="mr-2 size-3"/>
+      },
+      {
+        href: "/admin/management/users",
+        label: "Usuários",
+        icon: <ShieldIcon className="mr-2 size-3"/>
       }
     ]
   }

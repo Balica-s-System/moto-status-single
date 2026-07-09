@@ -10,4 +10,5 @@
  */
 export type * from './models/Client'
 export type * from './models/Motorcycle'
+export type * from './models/User'
 export type * from './commonInputTypes'
