@@ -72,8 +72,8 @@ const UsersTable = ({ onEdit }: UsersTableProps) => {
           </span>
         ),
         cell: ({ row }) => (
-          <Badge variant={row.original.role === "ADMIN" ? "default" : "secondary"}>
-            {row.original.role === "ADMIN" ? "Administrador" : "Usuário"}
+          <Badge variant={row.original.role === "admin" ? "default" : "secondary"}>
+            {row.original.role === "admin" ? "Administrador" : "Usuário"}
           </Badge>
         ),
       },

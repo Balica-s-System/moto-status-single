@@ -10,5 +10,8 @@
  */
 export type * from './models/Client'
 export type * from './models/Motorcycle'
-export type * from './models/User'
+export type * from './models/user'
+export type * from './models/session'
+export type * from './models/account'
+export type * from './models/verification'
 export type * from './commonInputTypes'

@@ -1,7 +1,7 @@
 import { requiredStringSchema } from "@/lib/zodSchema";
 import { z } from "zod/v3";
 
-const roleEnum = z.enum(["ADMIN", "USER"]);
+const roleEnum = z.enum(["admin", "user"]);
 
 const baseFields = {
   name: requiredStringSchema,
@@ -27,7 +27,7 @@ const userDefaultValues: UserSchema = {
   name: "",
   email: "",
   password: "",
-  role: "USER",
+  role: "user",
 };
 
 export { userSchema, userDefaultValues, roleEnum, type UserSchema };

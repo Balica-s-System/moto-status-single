@@ -24,7 +24,7 @@ const getUsers = async (
     sortOrder = "desc",
   } = filters;
 
-  const where: Prisma.UserWhereInput = {};
+  const where: Prisma.userWhereInput = {};
 
   if (searchTerm) {
     where.OR = [
@@ -53,7 +53,7 @@ const getUsers = async (
       name: u.name,
       email: u.email,
       password: "",
-      role: u.role,
+      role: u.role as "user" | "admin",
     })),
     total,
     page,
@@ -71,7 +71,7 @@ const getUser = async (id: string): Promise<UserSchema> => {
     name: res?.name ?? "",
     email: res?.email ?? "",
     password: "",
-    role: res?.role ?? "USER",
+    role: (res?.role ?? "user") as "user" | "admin",
   };
 };
 

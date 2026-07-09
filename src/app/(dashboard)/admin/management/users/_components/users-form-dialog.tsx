@@ -20,8 +20,8 @@ import { Loading } from "@/app/(dashboard)/_components/loading";
 import { ValueLabel } from "@/lib/types/valueLabel";
 
 const roleOptions: ValueLabel[] = [
-  { value: "ADMIN", label: "Administrador" },
-  { value: "USER", label: "Usuário" },
+  { value: "admin", label: "Administrador" },
+  { value: "user", label: "Usuário" },
 ];
 
 type UsersFormDialogProps = {

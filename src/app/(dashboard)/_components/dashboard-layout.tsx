@@ -1,25 +1,41 @@
-'use client'
+"use client";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { BoxIcon, ChevronDown, ChevronLeft, LogOut, Menu, ShieldIcon, Users2Icon } from "lucide-react";
-import { usePathname } from "next/navigation";
+import {
+  BoxIcon,
+  ChevronDown,
+  ChevronLeft,
+  LogOut,
+  Menu,
+  ShieldIcon,
+  Users2Icon,
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { Collapsible } from "radix-ui";
 import { ReactNode, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { authClient } from "@/lib/auth-client";
 
-type RouteGroup ={
+type RouteGroup = {
   group: string;
   items: {
     href: string;
     label: string;
-    icon: React.ReactNode
-  }[]
-}
+    icon: React.ReactNode;
+  }[];
+};
 
 const ROUTE_GROUPS: RouteGroup[] = [
   {
@@ -28,25 +44,51 @@ const ROUTE_GROUPS: RouteGroup[] = [
       {
         href: "/admin/management/clients",
         label: "Clientes",
-        icon: <Users2Icon className="mr-2 size-3"/>
-      }, 
+        icon: <Users2Icon className="mr-2 size-3" />,
+      },
       {
         href: "/admin/management/inventory",
         label: "Estoque",
-        icon: <BoxIcon  className="mr-2 size-3"/>
+        icon: <BoxIcon className="mr-2 size-3" />,
       },
       {
         href: "/admin/management/users",
         label: "Usuários",
-        icon: <ShieldIcon className="mr-2 size-3"/>
-      }
-    ]
-  }
-]
+        icon: <ShieldIcon className="mr-2 size-3" />,
+      },
+    ],
+  },
+];
 
-type DashboardLayoutProps = {children: ReactNode}
-const DashboardLayout = ({children}: DashboardLayoutProps) => {
-  const [open, setOpen] = useState(false)
+type DashboardLayoutProps = {
+  children: ReactNode;
+  user: {
+    name: string;
+    email: string;
+    role: string;
+  };
+};
+
+const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      },
+    });
+  };
+
+  const initials = user.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <div className="flex">
@@ -60,38 +102,36 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         </Collapsible.Root>
         <div className="flex items-center gap-x-2">
           <ThemeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex h-9 items-center gap-2 px-2"
-                >
-                  <Avatar className="size-8">
-                    <AvatarFallback>A</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden md:inline">Super Admin</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="flex items-center gap-3 px-2 py-1.5">
-                  <Avatar className="size-10">
-                    <AvatarFallback>A</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">Super Admin</p>
-                    <p className="text-muted-foreground text-xs">
-                      admin@email.com
-                    </p>
-                  </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex h-9 items-center gap-2 px-2"
+              >
+                <Avatar className="size-8">
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
+                <span className="hidden md:inline">{user.name}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="flex items-center gap-3 px-2 py-1.5">
+                <Avatar className="size-10">
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="text-muted-foreground text-xs">{user.email}</p>
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <LogOut className="size-4" /> Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+                <LogOut className="size-4" /> Sair
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -106,7 +146,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               open ? "translate-x-0" : "-translate-x-full"
             }`}
           >
-          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <h1 className="font-semibold">Admin Dashboard</h1>
               <Collapsible.Trigger asChild>
                 <Button size="icon" variant="outline">
@@ -133,17 +173,17 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         {children}
       </main>
     </div>
-  )
-}
+  );
+};
 
 export default DashboardLayout;
 
-type RouteGroupProps = RouteGroup
-const RouteGroup = ({group, items}: RouteGroupProps) => {
-  const [open, setOpen] = useState(false)
-   const pathname = usePathname();
+type RouteGroupProps = RouteGroup;
+const RouteGroup = ({ group, items }: RouteGroupProps) => {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
-    return (
+  return (
     <Collapsible.Root open={open} onOpenChange={setOpen}>
       <Collapsible.Trigger asChild>
         <Button
@@ -189,4 +229,4 @@ const RouteGroup = ({group, items}: RouteGroupProps) => {
       </Collapsible.Content>
     </Collapsible.Root>
   );
-}
+};

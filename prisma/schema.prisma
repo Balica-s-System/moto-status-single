@@ -58,20 +58,75 @@ enum ArrivalStatus {
   NO_INFORMATION
 }
 
-enum Role {
-  ADMIN
-  USER
+
+model user {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean?
+  image         String?
+  password      String?
+  role          String    @default("user")
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions session[]
+  accounts account[]
+
+  @@index([email])
+  @@map("users")
 }
 
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model session {
+  id             String    @id
+  expiresAt      DateTime
+  token          String    @unique
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  @@index([updatedAt])
-  @@map("users")
+  @@index([userId])
+  @@map("sessions")
+}
+
+model account {
+  id                String    @id
+  accountId         String
+  providerId        String
+  userId            String
+  user              user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  password          String?
+  accessToken       String?
+  refreshToken      String?
+  idToken           String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope             String?
+  idTokenClaims     Json?
+  sessionState      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([accountId, providerId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verifications")
 }

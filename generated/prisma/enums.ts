@@ -25,11 +25,3 @@ export const ArrivalStatus = {
 } as const
 
 export type ArrivalStatus = (typeof ArrivalStatus)[keyof typeof ArrivalStatus]
-
-
-export const Role = {
-  ADMIN: 'ADMIN',
-  USER: 'USER'
-} as const
-
-export type Role = (typeof Role)[keyof typeof Role]

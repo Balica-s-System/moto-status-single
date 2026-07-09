@@ -77,7 +77,7 @@ const getErrorMessage = (error: unknown): string => {
   }
 
   if (error instanceof Prisma.PrismaClientValidationError) {
-    return "Invalid data provided.";
+    return error.message;
   }
 
   if (error instanceof Error) {
