@@ -28,6 +28,7 @@ import { ControlledInput } from "@/components/ui/controlled-input";
 import { ControlledDatePicker } from "@/components/ui/controlled-date-picker";
 import { ControlledCombobox, ComboboxItem } from "@/components/ui/controlled-combobox";
 import { useAvailableMotorcycles } from "../_services/use-client-queries";
+import { maskDocument } from "@/lib/format";
 
 type ClientsFormDialogProps = {
   smallTrigger?: boolean;
@@ -139,7 +140,8 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
                 <ControlledInput<ClientSchema>
                   name="cpf"
                   label="CPF / CNPJ"
-                  placeholder="Apenas números"
+                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                  sanitize={maskDocument}
                 />
               </div>
 

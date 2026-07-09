@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
   useReactTable,
@@ -15,8 +15,9 @@ import { useDeleteClient } from "../_services/use-client-mutations";
 import { useGetClients } from "../_services/use-client-queries";
 import { ClientSchema } from "../_types/clientSchema";
 import { Button } from "@/components/ui/button";
-import { Edit, Eye, Trash } from "lucide-react";
+import { ChevronRight, Edit, Eye, Trash, User, IdCard, MapPin, UserCheck, Calendar, Bike } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
+import { cn } from "@/lib/utils";
 
 import {
   Table,
@@ -57,18 +58,69 @@ const ClientsTable = () => {
     }));
   }, [clientsQuery.data]);
 
+  const [openRows, setOpenRows] = useState<Set<string>>(new Set());
+
+  const toggleRow = (rowId: string) => {
+    setOpenRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowId)) {
+        next.delete(rowId);
+      } else {
+        next.add(rowId);
+      }
+      return next;
+    });
+  };
+
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
+        id: "toggle",
+        header: "",
+        cell: ({ row }) => {
+          const isOpen = openRows.has(row.id);
+          return (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleRow(row.id);
+              }}
+            >
+              <ChevronRight
+                className={cn(
+                  "h-4 w-4 transition-transform duration-200",
+                  isOpen && "rotate-90",
+                )}
+              />
+            </Button>
+          );
+        },
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
         accessorKey: "name",
-        header: "Nome",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <User className="size-4" />
+            Nome
+          </span>
+        ),
         cell: ({ row }) => (
           <span className="font-medium">{row.original.name}</span>
         ),
       },
       {
         accessorKey: "cpf",
-        header: "CPF / CNPJ",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <IdCard className="size-4" />
+            CPF / CNPJ
+          </span>
+        ),
         cell: ({ row }) => (
           <ClickToCopy text={row.original.cpf}>
             <span className="font-mono text-xs">{formatDocument(row.original.cpf)}</span>
@@ -77,15 +129,30 @@ const ClientsTable = () => {
       },
       {
         accessorKey: "city",
-        header: "Cidade",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <MapPin className="size-4" />
+            Cidade
+          </span>
+        ),
       },
       {
         accessorKey: "sellersName",
-        header: "Vendedor",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <UserCheck className="size-4" />
+            Vendedor
+          </span>
+        ),
       },
       {
         accessorKey: "billingDate",
-        header: "Data Fat.",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <Calendar className="size-4" />
+            Data Fat.
+          </span>
+        ),
         cell: ({ row }) => {
           const date = row.original.billingDate;
           return date ? format(new Date(date), "dd/MM/yyyy") : "-";
@@ -93,7 +160,12 @@ const ClientsTable = () => {
       },
       {
         accessorKey: "_motorcycleCount",
-        header: "Motos",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <Bike className="size-4" />
+            Motos
+          </span>
+        ),
         cell: ({ row }) => (
           <span className="text-center block">{row.original._motorcycleCount}</span>
         ),
@@ -144,7 +216,7 @@ const ClientsTable = () => {
         },
       },
     ],
-    [updateClientId, updateClientDialogOpen, updateClientPreviewOpen, deleteClientMutation],
+    [updateClientId, updateClientDialogOpen, updateClientPreviewOpen, deleteClientMutation, openRows],
   );
 
   const table = useReactTable({
@@ -181,15 +253,62 @@ const ClientsTable = () => {
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+          {table.getRowModel().rows.map((row) => {
+            const isOpen = openRows.has(row.id);
+            const cellCount = row.getVisibleCells().length;
+            const motorcycles = row.original._motorcycles ?? [];
+            return (
+              <Fragment key={row.id}>
+                <TableRow
+                  className="cursor-pointer"
+                  onClick={() => toggleRow(row.id)}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                {isOpen && (
+                  <TableRow>
+                    <TableCell colSpan={cellCount} className="p-0">
+                      <div className="border-t bg-muted/30 px-6 py-4 animate-in slide-in-from-top-1 duration-200">
+                        <p className="mb-3 text-xs font-medium text-muted-foreground">
+                          Motos associadas ({motorcycles.length})
+                        </p>
+                        {motorcycles.length > 0 ? (
+                          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                            {motorcycles.map((moto: any) => (
+                              <div
+                                key={moto.id}
+                                className="flex items-center gap-3 rounded-md border bg-card px-3 py-2"
+                              >
+                                <span className="text-sm font-medium">
+                                  {moto.model}
+                                </span>
+                                <ClickToCopy text={moto.chassi}>
+                                  <span className="font-mono text-xs text-muted-foreground">
+                                    {moto.chassi}
+                                  </span>
+                                </ClickToCopy>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            Nenhuma moto associada
+                          </p>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
+            );
+          })}
         </TableBody>
       </Table>
       <Pagination

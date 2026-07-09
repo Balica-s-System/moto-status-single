@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { format } from "date-fns";
 import {
   useReactTable,
@@ -15,8 +15,9 @@ import { useDeleteMotorcycle } from "../_services/use-inventory-mutations";
 import { useGetMotorcycles } from "../_services/use-inventory-queries";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
 import { Button } from "@/components/ui/button";
-import { Edit, Eye, Trash } from "lucide-react";
+import { ChevronRight, Edit, Eye, Trash, Bike, Hash, Calendar } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
+import { cn } from "@/lib/utils";
 
 import {
   Table,
@@ -58,18 +59,69 @@ const InventoryTable = () => {
     totalPages: 0,
   };
 
+  const [openRows, setOpenRows] = useState<Set<string>>(new Set());
+
+  const toggleRow = (rowId: string) => {
+    setOpenRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowId)) {
+        next.delete(rowId);
+      } else {
+        next.add(rowId);
+      }
+      return next;
+    });
+  };
+
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
+        id: "toggle",
+        header: "",
+        cell: ({ row }) => {
+          const isOpen = openRows.has(row.id);
+          return (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleRow(row.id);
+              }}
+            >
+              <ChevronRight
+                className={cn(
+                  "h-4 w-4 transition-transform duration-200",
+                  isOpen && "rotate-90",
+                )}
+              />
+            </Button>
+          );
+        },
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
         accessorKey: "model",
-        header: "Modelo",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <Bike className="size-4" />
+            Modelo
+          </span>
+        ),
         cell: ({ row }) => (
           <span className="font-medium">{row.original.model}</span>
         ),
       },
       {
         accessorKey: "chassi",
-        header: "Chassi",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <Hash className="size-4" />
+            Chassi
+          </span>
+        ),
         cell: ({ row }) => (
           <ClickToCopy text={row.original.chassi}>
             <span className="font-mono text-xs">{row.original.chassi}</span>
@@ -78,46 +130,15 @@ const InventoryTable = () => {
       },
       {
         accessorKey: "forecastArrival",
-        header: "Previsão de Chegada",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <Calendar className="size-4" />
+            Previsão de Chegada
+          </span>
+        ),
         cell: ({ row }) => {
           const date = row.original.forecastArrival;
           return date ? format(new Date(date), "dd/MM/yyyy") : "-";
-        },
-      },
-      {
-        accessorKey: "forecastArrivalStatus",
-        header: "Status da Chegada",
-        cell: ({ row }) => {
-          const status = row.original.forecastArrivalStatus;
-          return arrivalStatusLabels[status] || status;
-        },
-      },
-      {
-        accessorKey: "registrationStatus",
-        header: "Status Emplacamento",
-        cell: ({ row }) => {
-          const status = row.original.registrationStatus;
-          return status ? registrationStatusLabels[status] || status : "-";
-        },
-      },
-      {
-        accessorKey: "registrationDate",
-        header: "Data Emplacamento",
-        cell: ({ row }) => {
-          const date = row.original.registrationDate;
-          return date ? format(new Date(date), "dd/MM/yyyy") : "-";
-        },
-      },
-      {
-        accessorKey: "client",
-        header: "Cliente",
-        cell: ({ row }) => {
-          const client = row.original.client;
-          return client ? (
-            <span className="font-medium">{client.name}</span>
-          ) : (
-            <span className="text-muted-foreground">-</span>
-          );
         },
       },
       {
@@ -166,7 +187,7 @@ const InventoryTable = () => {
         },
       },
     ],
-    [updateMotorcycleId, updateInventoryDialogOpen, updateInventoryPreviewOpen, deleteMotorcycleMutation],
+    [updateMotorcycleId, updateInventoryDialogOpen, updateInventoryPreviewOpen, deleteMotorcycleMutation, openRows],
   );
 
   const table = useReactTable({
@@ -203,15 +224,90 @@ const InventoryTable = () => {
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+          {table.getRowModel().rows.map((row) => {
+            const isOpen = openRows.has(row.id);
+            const cellCount = row.getVisibleCells().length;
+            return (
+              <Fragment key={row.id}>
+                <TableRow
+                  className="cursor-pointer"
+                  onClick={() => toggleRow(row.id)}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                {isOpen && (
+                  <TableRow>
+                    <TableCell colSpan={cellCount} className="p-0">
+                      <div className="border-t bg-muted/30 px-6 py-4 animate-in slide-in-from-top-1 duration-200">
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                          <div>
+                            <p className="text-xs font-medium text-muted-foreground">
+                              Status da Chegada
+                            </p>
+                            <p className="text-sm">
+                              {arrivalStatusLabels[
+                                row.original.forecastArrivalStatus
+                              ] || row.original.forecastArrivalStatus}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium text-muted-foreground">
+                              Status Emplacamento
+                            </p>
+                            <p className="text-sm">
+                              {row.original.registrationStatus
+                                ? registrationStatusLabels[
+                                    row.original.registrationStatus
+                                  ] || row.original.registrationStatus
+                                : "-"}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium text-muted-foreground">
+                              Data Emplacamento
+                            </p>
+                            <p className="text-sm">
+                              {row.original.registrationDate
+                                ? format(
+                                    new Date(
+                                      row.original.registrationDate,
+                                    ),
+                                    "dd/MM/yyyy",
+                                  )
+                                : "-"}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium text-muted-foreground">
+                              Cliente
+                            </p>
+                            <p className="text-sm">
+                              {row.original.client ? (
+                                <span className="font-medium">
+                                  {row.original.client.name}
+                                </span>
+                              ) : (
+                                <span className="text-muted-foreground">
+                                  -
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
+            );
+          })}
         </TableBody>
       </Table>
       <Pagination

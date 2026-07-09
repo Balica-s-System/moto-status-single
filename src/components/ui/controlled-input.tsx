@@ -10,6 +10,7 @@ type ControlledInputProps<T extends FieldValues> = {
   name: Path<T>;
   label?: string;
   containerClassName?: string;
+  sanitize?: (value: string) => string;
 } & ComponentProps<"input">;
 
 export function ControlledInput<T extends FieldValues>({
@@ -18,6 +19,7 @@ export function ControlledInput<T extends FieldValues>({
   name,
   label,
   containerClassName,
+  sanitize,
   ...props
 }: ControlledInputProps<T>) {
   const { control } = useFormContext<T>();
@@ -40,6 +42,12 @@ export function ControlledInput<T extends FieldValues>({
               data-slot="input"
               aria-invalid={!!error}
               {...field}
+              onChange={(e) => {
+                const value = sanitize
+                  ? sanitize(e.target.value)
+                  : e.target.value;
+                field.onChange(value);
+              }}
               {...props}
             />
             {!!error && (
