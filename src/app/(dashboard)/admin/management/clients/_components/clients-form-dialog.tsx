@@ -52,10 +52,9 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
   const updateClientMutation = useUpdateClient();
 
   const [motorcycleSearch, setMotorcycleSearch] = useState("");
-  const watchMotorcycleIds = form.watch("motorcycleIds");
   const availableMotorcyclesQuery = useAvailableMotorcycles(
     motorcycleSearch,
-    selectedClientId ? watchMotorcycleIds : undefined,
+    selectedClientId ? clientQuery.data?.motorcycleIds : undefined,
   );
 
   const isPending =

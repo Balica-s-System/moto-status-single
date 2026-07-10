@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BoxIcon, Users2Icon } from "lucide-react";
+import { ShieldIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -11,10 +11,8 @@ const Layout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
 
   const getDefaultTab = () => {
-    if (pathname.includes("/admin/management/clients")) return "clients";
-    if (pathname.includes("/admin/management/inventory")) return "inventory";
-    if (pathname.includes("/admin/management/users")) return "users";
-    return "clients";
+    if (pathname.includes("/admin/settings/users")) return "users";
+    return "users";
   };
 
   return (
@@ -22,16 +20,10 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="mb-6">
         <Tabs value={getDefaultTab()}>
           <TabsList>
-            <TabsTrigger value="clients" asChild>
-              <Link href="/admin/management/clients">
-                <Users2Icon />
-                Clientes
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="inventory" asChild>
-              <Link href="/admin/management/inventory">
-                <BoxIcon />
-                Estoque
+            <TabsTrigger value="users" asChild>
+              <Link href="/admin/management/users">
+                <ShieldIcon />
+                Usuários
               </Link>
             </TabsTrigger>
           </TabsList>

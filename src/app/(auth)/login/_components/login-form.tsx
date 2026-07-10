@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Bike } from "lucide-react";
+import Image from "next/image";
 import { loginSchema, LoginSchema } from "../_types/loginSchema";
 import { useLogin } from "../_services/use-login-mutation";
 import Link from "next/link";
@@ -32,8 +32,14 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-lg bg-primary/10">
-          <Bike className="size-6 text-primary" />
+        <div className="mx-auto mb-2 flex size-27 items-center justify-center rounded-lg">
+          <Image
+            src="/logo-auge.png"
+            alt="Auge Motos"
+            className="object-cover"
+            width={100}
+            height={100}
+          />
         </div>
         <CardTitle className="text-2xl">Auge Motos</CardTitle>
         <CardDescription>Faça login para acessar o sistema</CardDescription>
@@ -53,7 +59,11 @@ const LoginForm = () => {
               placeholder="••••••••"
               type="password"
             />
-            <Button type="submit" className="w-full" isLoading={loginMutation.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              isLoading={loginMutation.isPending}
+            >
               Entrar
             </Button>
           </FormProvider>

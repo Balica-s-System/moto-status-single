@@ -24,6 +24,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Collapsible } from "radix-ui";
 import { ReactNode, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { authClient } from "@/lib/auth-client";
@@ -51,8 +52,13 @@ const ROUTE_GROUPS: RouteGroup[] = [
         label: "Estoque",
         icon: <BoxIcon className="mr-2 size-3" />,
       },
+    ],
+  },
+  {
+    group: "Configurações",
+    items: [
       {
-        href: "/admin/management/users",
+        href: "/admin/settings/users",
         label: "Usuários",
         icon: <ShieldIcon className="mr-2 size-3" />,
       },
@@ -72,6 +78,15 @@ type DashboardLayoutProps = {
 const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const userRole = user.role || "user";
+
+  const filteredRouteGroups = ROUTE_GROUPS.filter((group) => {
+    if (userRole === "admin") {
+      return group;
+    } else {
+      return group.group === "Administração";
+    }
+  });
 
   const handleLogout = async () => {
     await authClient.signOut({
@@ -100,6 +115,13 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
             </Button>
           </Collapsible.Trigger>
         </Collapsible.Root>
+        <Image
+          src="/logo-auge.png"
+          alt="Auge Motos"
+          width={240}
+          height={80}
+          className="h-15 w-auto"
+        />
         <div className="flex items-center gap-x-2">
           <ThemeToggle />
           <DropdownMenu>
@@ -147,7 +169,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
             }`}
           >
             <div className="flex items-center justify-between">
-              <h1 className="font-semibold">Admin Dashboard</h1>
+              Moto Status
               <Collapsible.Trigger asChild>
                 <Button size="icon" variant="outline">
                   <ChevronLeft />
@@ -158,7 +180,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
             <Separator className="my-2" />
 
             <div className="mt-4 flex flex-col">
-              {ROUTE_GROUPS.map((routeGroup) => (
+              {filteredRouteGroups.map((routeGroup) => (
                 <RouteGroup {...routeGroup} key={routeGroup.group} />
               ))}
             </div>
