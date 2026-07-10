@@ -32,16 +32,16 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex size-27 items-center justify-center rounded-lg">
+        <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-2xl bg-primary/10">
           <Image
             src="/logo-auge.png"
             alt="Auge Motos"
-            className="object-cover"
-            width={100}
-            height={100}
+            className="object-contain"
+            width={64}
+            height={64}
           />
         </div>
-        <CardTitle className="text-2xl">Auge Motos</CardTitle>
+        <CardTitle className="text-xl font-semibold">Auge Motos</CardTitle>
         <CardDescription>Faça login para acessar o sistema</CardDescription>
       </CardHeader>
       <CardContent>
@@ -72,7 +72,7 @@ const LoginForm = () => {
       <CardFooter className="justify-center">
         <p className="text-muted-foreground text-sm">
           Não tem uma conta?{" "}
-          <Link href="/register" className="text-primary hover:underline">
+          <Link href="/register" className="font-medium text-primary hover:underline">
             Criar conta
           </Link>
         </p>
