@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
+import { Loading } from "@/app/(dashboard)/_components/loading";
 
 const ClientsPreviewDialog = () => {
   const {
@@ -60,7 +61,9 @@ const ClientsPreviewDialog = () => {
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">CPF / CNPJ</p>
               <ClickToCopy text={item.cpf}>
-                <span className="font-medium font-mono text-xs">{formatDocument(item.cpf)}</span>
+                <span className="font-medium font-mono text-xs">
+                  {formatDocument(item.cpf)}
+                </span>
               </ClickToCopy>
             </div>
 
@@ -75,7 +78,9 @@ const ClientsPreviewDialog = () => {
             </div>
 
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Data de Faturamento</p>
+              <p className="text-sm text-muted-foreground">
+                Data de Faturamento
+              </p>
               <p className="font-medium">
                 {item.billingDate
                   ? format(new Date(item.billingDate), "dd/MM/yyyy")
@@ -84,7 +89,9 @@ const ClientsPreviewDialog = () => {
             </div>
 
             <div className="space-y-1 col-span-2">
-              <p className="text-sm text-muted-foreground">Motocicletas Vinculadas</p>
+              <p className="text-sm text-muted-foreground">
+                Motocicletas Vinculadas
+              </p>
               {item._motorcycles && item._motorcycles.length > 0 ? (
                 <div className="flex flex-wrap gap-2 mt-1">
                   {item._motorcycles.map((moto) => (
@@ -102,9 +109,7 @@ const ClientsPreviewDialog = () => {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center py-8 text-muted-foreground">
-            Carregando...
-          </div>
+          <Loading />
         )}
 
         <DialogFooter>

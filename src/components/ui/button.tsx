@@ -91,7 +91,9 @@ const Button = ({
     );
   };
 
-  const content = (
+  const needsWrapper = isLoading || badge;
+
+  const content = needsWrapper ? (
     <>
       {isLoading ? (
         <>
@@ -103,10 +105,20 @@ const Button = ({
       )}
       {renderBadge()}
     </>
+  ) : (
+    children
   );
 
   if (asChild) {
-    return <Comp {...props}>{content}</Comp>;
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        disabled={disabled || isLoading}
+        {...props}
+      >
+        {content}
+      </Comp>
+    );
   }
 
   return (

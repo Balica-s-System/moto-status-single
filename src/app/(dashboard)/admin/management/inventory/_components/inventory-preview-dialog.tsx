@@ -22,7 +22,10 @@ const arrivalStatusLabels: Record<string, string> = {
   ARRIVED: "Entregue",
 };
 
-const arrivalStatusVariants: Record<string, "default" | "destructive" | "secondary"> = {
+const arrivalStatusVariants: Record<
+  string,
+  "default" | "destructive" | "secondary"
+> = {
   NO_INFORMATION: "secondary",
   DELAYED: "destructive",
   ARRIVED: "default",
@@ -34,7 +37,10 @@ const registrationStatusLabels: Record<string, string> = {
   PLATED: "Emplacada",
 };
 
-const registrationStatusVariants: Record<string, "default" | "secondary" | "outline"> = {
+const registrationStatusVariants: Record<
+  string,
+  "default" | "secondary" | "outline"
+> = {
   NO_PLATE: "outline",
   PLATING: "secondary",
   PLATED: "default",
@@ -42,7 +48,6 @@ const registrationStatusVariants: Record<string, "default" | "secondary" | "outl
 
 const InventoryPreviewDialog = () => {
   const {
-    selectedMotorcycleId,
     inventoryPreviewOpen,
     updateInventoryPreviewOpen,
     updateMotorcycleId,
@@ -85,12 +90,16 @@ const InventoryPreviewDialog = () => {
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Chassi</p>
               <ClickToCopy text={item.chassi}>
-                <span className="font-medium font-mono text-xs">{item.chassi}</span>
+                <span className="font-medium font-mono text-xs">
+                  {item.chassi}
+                </span>
               </ClickToCopy>
             </div>
 
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Previsão de Chegada</p>
+              <p className="text-sm text-muted-foreground">
+                Previsão de Chegada
+              </p>
               <p className="font-medium">
                 {item.forecastArrival
                   ? format(new Date(item.forecastArrival), "dd/MM/yyyy")
@@ -100,16 +109,30 @@ const InventoryPreviewDialog = () => {
 
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Status da Chegada</p>
-              <Badge variant={arrivalStatusVariants[item.forecastArrivalStatus] ?? "secondary"}>
-                {arrivalStatusLabels[item.forecastArrivalStatus] ?? item.forecastArrivalStatus}
+              <Badge
+                variant={
+                  arrivalStatusVariants[item.forecastArrivalStatus] ??
+                  "secondary"
+                }
+              >
+                {arrivalStatusLabels[item.forecastArrivalStatus] ??
+                  item.forecastArrivalStatus}
               </Badge>
             </div>
 
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Status Emplacamento</p>
+              <p className="text-sm text-muted-foreground">
+                Status Emplacamento
+              </p>
               {item.registrationStatus ? (
-                <Badge variant={registrationStatusVariants[item.registrationStatus] ?? "outline"}>
-                  {registrationStatusLabels[item.registrationStatus] ?? item.registrationStatus}
+                <Badge
+                  variant={
+                    registrationStatusVariants[item.registrationStatus] ??
+                    "outline"
+                  }
+                >
+                  {registrationStatusLabels[item.registrationStatus] ??
+                    item.registrationStatus}
                 </Badge>
               ) : (
                 <p className="font-medium">-</p>
@@ -126,7 +149,7 @@ const InventoryPreviewDialog = () => {
             </div>
           </div>
         ) : (
-          < Loading />
+          <Loading />
         )}
 
         <DialogFooter>

@@ -26,9 +26,13 @@ import {
 } from "@/components/ui/dialog";
 import { ControlledInput } from "@/components/ui/controlled-input";
 import { ControlledDatePicker } from "@/components/ui/controlled-date-picker";
-import { ControlledCombobox, ComboboxItem } from "@/components/ui/controlled-combobox";
+import {
+  ControlledCombobox,
+  ComboboxItem,
+} from "@/components/ui/controlled-combobox";
 import { useAvailableMotorcycles } from "../_services/use-client-queries";
 import { maskDocument } from "@/lib/format";
+import { Loading } from "@/app/(dashboard)/_components/loading";
 
 type ClientsFormDialogProps = {
   smallTrigger?: boolean;
@@ -119,74 +123,76 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            {selectedClientId
-              ? "Editar Cliente"
-              : "Criar novo Cliente"}
+            {selectedClientId ? "Editar Cliente" : "Criar novo Cliente"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormProvider {...form}>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <ControlledInput<ClientSchema>
-                  name="name"
-                  label="Nome"
-                  placeholder="Ex: João Silva"
-                />
-              </div>
+        {selectedClientId && clientQuery.isLoading ? (
+          <Loading />
+        ) : (
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormProvider {...form}>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <ControlledInput<ClientSchema>
+                    name="name"
+                    label="Nome"
+                    placeholder="Ex: João Silva"
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledInput<ClientSchema>
-                  name="cpf"
-                  label="CPF / CNPJ"
-                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
-                  sanitize={maskDocument}
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledInput<ClientSchema>
+                    name="cpf"
+                    label="CPF / CNPJ"
+                    placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                    sanitize={maskDocument}
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledInput<ClientSchema>
-                  name="city"
-                  label="Cidade"
-                  placeholder="Ex: São Paulo"
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledInput<ClientSchema>
+                    name="city"
+                    label="Cidade"
+                    placeholder="Ex: São Paulo"
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledInput<ClientSchema>
-                  name="sellersName"
-                  label="Nome do Vendedor"
-                  placeholder="Ex: Carlos"
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledInput<ClientSchema>
+                    name="sellersName"
+                    label="Nome do Vendedor"
+                    placeholder="Ex: Carlos"
+                  />
+                </div>
 
-              <div className="col-span-1">
-                <ControlledDatePicker<ClientSchema>
-                  name="billingDate"
-                  label="Data de Faturamento"
-                  placeholder="Selecione a data"
-                />
-              </div>
+                <div className="col-span-1">
+                  <ControlledDatePicker<ClientSchema>
+                    name="billingDate"
+                    label="Data de Faturamento"
+                    placeholder="Selecione a data"
+                  />
+                </div>
 
-              <div className="col-span-2">
-                <ControlledCombobox<ClientSchema>
-                  name="motorcycleIds"
-                  label="Motocicletas"
-                  placeholder="Selecione as motocicletas"
-                  searchPlaceholder="Busque por chassi ou modelo..."
-                  options={motorcycleOptions}
-                  loading={availableMotorcyclesQuery.isLoading}
-                  onSearch={setMotorcycleSearch}
-                />
+                <div className="col-span-2">
+                  <ControlledCombobox<ClientSchema>
+                    name="motorcycleIds"
+                    label="Motocicletas"
+                    placeholder="Selecione as motocicletas"
+                    searchPlaceholder="Busque por chassi ou modelo..."
+                    options={motorcycleOptions}
+                    loading={availableMotorcyclesQuery.isLoading}
+                    onSearch={setMotorcycleSearch}
+                  />
+                </div>
               </div>
-            </div>
-          </FormProvider>
-          <DialogFooter>
-            <Button type="submit" isLoading={isPending}>
-              {!!selectedClientId ? "Editar" : "Criar"} Cliente
-            </Button>
-          </DialogFooter>
-        </form>
+            </FormProvider>
+            <DialogFooter>
+              <Button type="submit" isLoading={isPending}>
+                {!!selectedClientId ? "Editar" : "Criar"} Cliente
+              </Button>
+            </DialogFooter>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );
