@@ -18,6 +18,7 @@ import {
   LogOut,
   Menu,
   ShieldIcon,
+  User2Icon,
   Users2Icon,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -64,6 +65,16 @@ const ROUTE_GROUPS: RouteGroup[] = [
       },
     ],
   },
+  {
+    group: "Conta",
+    items: [
+      {
+        href: "/admin/settings/profile",
+        label: "Perfil",
+        icon: <User2Icon className="mr-2 size-3" />,
+      },
+    ],
+  },
 ];
 
 type DashboardLayoutProps = {
@@ -83,9 +94,8 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
   const filteredRouteGroups = ROUTE_GROUPS.filter((group) => {
     if (userRole === "admin") {
       return group;
-    } else {
-      return group.group === "Administração";
     }
+    return group.group === "Administração" || group.group === "Conta";
   });
 
   const handleLogout = async () => {
