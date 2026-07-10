@@ -19,7 +19,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         }}
       />
 
-      <div className="relative z-10 w-full max-w-md">{children}</div>
+      <div className="relative z-10 w-full max-w-[28rem]">{children}</div>
     </div>
   );
 };
