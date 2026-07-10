@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/drawer";
 import { ControlledInput } from "@/components/ui/controlled-input";
 import { Button } from "@/components/ui/button";
-import { BrushCleaning, FilterIcon, X } from "lucide-react";
+import { FilterIcon, Search, X } from "lucide-react";
 import { ControlledSelect } from "@/components/ui/controlled-select";
 
 const ClientsFiltersDrawer = () => {
@@ -56,17 +56,21 @@ const ClientsFiltersDrawer = () => {
   const resetSearchTerm = () => {
     form.setValue("searchTerm", "");
     updateClientSearchTerm("");
-  }
+  };
 
   useEffect(() => {
     updateClientSearchTerm(debouncedSearchTerm);
   }, [debouncedSearchTerm, updateClientSearchTerm]);
 
+  // Reset only drawer-specific fields (sort) when the drawer closes.
+  // searchTerm is managed independently via useWatch + useDebounce,
+  // so resetting it here would overwrite what the user is actively typing.
   useEffect(() => {
     if (!clientFiltersDrawerOpen) {
-      form.reset(clientFilters);
+      form.setValue("sortBy", clientFilters.sortBy);
+      form.setValue("sortOrder", clientFilters.sortOrder);
     }
-  }, [clientFilters, clientFiltersDrawerOpen, form]);
+  }, [clientFiltersDrawerOpen, clientFilters.sortBy, clientFilters.sortOrder, form]);
 
   const onSubmit: SubmitHandler<ClientFiltersSchema> = (data) => {
     updateClientFilters(data);
@@ -81,32 +85,43 @@ const ClientsFiltersDrawer = () => {
       handleOnly
     >
       <FormProvider {...form}>
-        <div className="flex gap-2">
-          <div className="flex min-w-82 items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {/* Search field */}
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <ControlledInput<ClientFiltersSchema>
               name="searchTerm"
-              placeholder="Pesquise por Nome, CPF/CNPJ, Cidade ou Vendedor"
-              className="flex-1"
+              placeholder="Pesquise por nome, CPF, cidade..."
+              className="pl-9 pr-9"
+              aria-label="Buscar clientes"
             />
-
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              onClick={resetSearchTerm}
-              aria-label="Limpar busca"
-              title="Limpar busca"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            {searchTerm && (
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="absolute right-1 top-1/2 size-7 -translate-y-1/2"
+                onClick={resetSearchTerm}
+                aria-label="Limpar busca"
+              >
+                <X className="size-3.5" />
+              </Button>
+            )}
           </div>
+
+          {/* Filter trigger */}
           <DrawerTrigger asChild>
-            <Button variant="outline" badge={areFiltersModified}>
-              <FilterIcon />
+            <Button
+              variant="outline"
+              badge={areFiltersModified}
+              className="shrink-0 touch-target"
+            >
+              <FilterIcon className="size-4" aria-hidden="true" />
               Filtros
             </Button>
           </DrawerTrigger>
         </div>
+
         <form>
           <DrawerContent>
             <DrawerHeader className="text-left">
@@ -116,47 +131,42 @@ const ClientsFiltersDrawer = () => {
               </DrawerDescription>
             </DrawerHeader>
 
-            <div className="space-y-2 p-4">
-              <div className="flex flex-wrap gap-2">
-                <ControlledSelect<ClientFiltersSchema>
-                  label="Ordernar Por"
-                  name="sortBy"
-                  options={[
-                    { label: "Nome", value: "name" },
-                    { label: "CPF/CNPJ", value: "cpf" },
-                    { label: "Cidade", value: "city" },
-                    { label: "Vendedor", value: "sellersName" },
-                    { label: "Data Faturamento", value: "billingDate" },
-                  ]}
-                />
-
-                <ControlledSelect<ClientFiltersSchema>
-                  label="Ordernar"
-                  name="sortOrder"
-                  options={[
-                    { label: "Ascendente", value: "asc" },
-                    { label: "Decrescente", value: "desc" },
-                  ]}
-
-                />
-              </div>
+            <div className="space-y-4 p-4">
+              <ControlledSelect<ClientFiltersSchema>
+                label="Ordenar Por"
+                name="sortBy"
+                options={[
+                  { label: "Nome", value: "name" },
+                  { label: "CPF/CNPJ", value: "cpf" },
+                  { label: "Cidade", value: "city" },
+                  { label: "Vendedor", value: "sellersName" },
+                  { label: "Data Faturamento", value: "billingDate" },
+                ]}
+              />
+              <ControlledSelect<ClientFiltersSchema>
+                label="Direção"
+                name="sortOrder"
+                options={[
+                  { label: "Ascendente", value: "asc" },
+                  { label: "Decrescente", value: "desc" },
+                ]}
+              />
             </div>
+
             <DrawerFooter className="pt-2">
-              <DrawerClose asChild>
-                <Button variant="outline">Cancelar</Button>
-              </DrawerClose>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  form.reset(clientFiltersDefaultValues);
-                }}
-              >
-                Redefinir
-              </Button>
               <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
                 Aplicar Filtros
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset(clientFiltersDefaultValues)}
+              >
+                Redefinir
+              </Button>
+              <DrawerClose asChild>
+                <Button variant="ghost">Cancelar</Button>
+              </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </form>

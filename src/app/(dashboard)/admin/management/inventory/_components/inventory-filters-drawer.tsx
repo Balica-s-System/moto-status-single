@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/drawer";
 import { ControlledInput } from "@/components/ui/controlled-input";
 import { Button } from "@/components/ui/button";
-import { BrushCleaning, FilterIcon, X } from "lucide-react";
+import { FilterIcon, Search, X } from "lucide-react";
 import { ControlledSelect } from "@/components/ui/controlled-select";
 
 const InventoryFiltersDrawer = () => {
@@ -56,7 +56,7 @@ const InventoryFiltersDrawer = () => {
   const resetSearchTerm = () => {
     form.setValue("searchTerm", "");
     updateMotorcycleSearchTerm("");
-  }
+  };
 
   useEffect(() => {
     updateMotorcycleSearchTerm(debouncedSearchTerm);
@@ -64,9 +64,11 @@ const InventoryFiltersDrawer = () => {
 
   useEffect(() => {
     if (!motorcycleFiltersDrawerOpen) {
-      form.reset(motorcycleFilters);
+      form.setValue("sortBy", motorcycleFilters.sortBy);
+      form.setValue("sortOrder", motorcycleFilters.sortOrder);
+      form.setValue("forecastArrivalStatus", motorcycleFilters.forecastArrivalStatus);
     }
-  }, [motorcycleFilters, motorcycleFiltersDrawerOpen, form]);
+  }, [motorcycleFiltersDrawerOpen, motorcycleFilters.sortBy, motorcycleFilters.sortOrder, motorcycleFilters.forecastArrivalStatus, form]);
 
   const onSubmit: SubmitHandler<MotorcycleFiltersSchema> = (data) => {
     updateMotorcycleFilters(data);
@@ -81,32 +83,43 @@ const InventoryFiltersDrawer = () => {
       handleOnly
     >
       <FormProvider {...form}>
-        <div className="flex gap-2">
-          <div className="flex min-w-82 items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {/* Search field */}
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <ControlledInput<MotorcycleFiltersSchema>
               name="searchTerm"
-              placeholder="Pesquise por Modelo ou Chassi"
-              className="flex-1"
+              placeholder="Pesquise por modelo ou chassi..."
+              className="pl-9 pr-9"
+              aria-label="Buscar motocicletas"
             />
-
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              onClick={resetSearchTerm}
-              aria-label="Limpar busca"
-              title="Limpar busca"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            {searchTerm && (
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="absolute right-1 top-1/2 size-7 -translate-y-1/2"
+                onClick={resetSearchTerm}
+                aria-label="Limpar busca"
+              >
+                <X className="size-3.5" />
+              </Button>
+            )}
           </div>
+
+          {/* Filter trigger */}
           <DrawerTrigger asChild>
-            <Button variant="outline" badge={areFiltersModified}>
-              <FilterIcon />
+            <Button
+              variant="outline"
+              badge={areFiltersModified}
+              className="shrink-0 touch-target"
+            >
+              <FilterIcon className="size-4" aria-hidden="true" />
               Filtros
             </Button>
           </DrawerTrigger>
         </div>
+
         <form>
           <DrawerContent>
             <DrawerHeader className="text-left">
@@ -116,55 +129,50 @@ const InventoryFiltersDrawer = () => {
               </DrawerDescription>
             </DrawerHeader>
 
-            <div className="space-y-2 p-4">
-              <div className="flex flex-wrap gap-2">
-                <ControlledSelect<MotorcycleFiltersSchema>
-                  label="Ordernar Por"
-                  name="sortBy"
-                  options={[
-                    { label: "Chassi", value: "chassi" },
-                    { label: "Modelo", value: "model" },
-                    { label: "Previsão de Chegada", value: "forecastArrival" },
-                  ]}
-                />
-
-                <ControlledSelect<MotorcycleFiltersSchema>
-                  label="Ordernar"
-                  name="sortOrder"
-                  options={[
-                    { label: "Ascendente", value: "asc" },
-                    { label: "Decrescente", value: "desc" },
-                  ]}
-
-                />
-                <ControlledSelect<MotorcycleFiltersSchema>
-                  label="Status da Chegada"
-                  name="forecastArrivalStatus"
-                  placeholder="Escolha um status"
-                  options={[
-                    { label: "Entregue", value: "ARRIVED" },
-                    { label: "Atrasado", value: "DELAYED" },
-                    { label: "Sem Informação", value: "NO_INFORMATION" },
-                  ]}
-                />
-              </div>
+            <div className="space-y-4 p-4">
+              <ControlledSelect<MotorcycleFiltersSchema>
+                label="Ordenar Por"
+                name="sortBy"
+                options={[
+                  { label: "Chassi", value: "chassi" },
+                  { label: "Modelo", value: "model" },
+                  { label: "Previsão de Chegada", value: "forecastArrival" },
+                ]}
+              />
+              <ControlledSelect<MotorcycleFiltersSchema>
+                label="Direção"
+                name="sortOrder"
+                options={[
+                  { label: "Ascendente", value: "asc" },
+                  { label: "Decrescente", value: "desc" },
+                ]}
+              />
+              <ControlledSelect<MotorcycleFiltersSchema>
+                label="Status da Chegada"
+                name="forecastArrivalStatus"
+                placeholder="Todos os status"
+                options={[
+                  { label: "Entregue", value: "ARRIVED" },
+                  { label: "Atrasado", value: "DELAYED" },
+                  { label: "Sem Informação", value: "NO_INFORMATION" },
+                ]}
+              />
             </div>
+
             <DrawerFooter className="pt-2">
-              <DrawerClose asChild>
-                <Button variant="outline">Cancelar</Button>
-              </DrawerClose>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  form.reset(motorcycleFiltersDefaultValues);
-                }}
-              >
-                Redefinir
-              </Button>
               <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
                 Aplicar Filtros
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset(motorcycleFiltersDefaultValues)}
+              >
+                Redefinir
+              </Button>
+              <DrawerClose asChild>
+                <Button variant="ghost">Cancelar</Button>
+              </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </form>

@@ -1,61 +1,73 @@
 "use client";
 
+import { FieldValues, Path, useFormContext } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { ComponentProps } from "react";
-import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
-import { Label } from "./label";
-import { Input } from "./input";
+import { InputHTMLAttributes, useId } from "react";
 
-type ControlledInputProps<T extends FieldValues> = {
-  name: Path<T>;
-  label?: string;
-  containerClassName?: string;
-  sanitize?: (value: string) => string;
-} & ComponentProps<"input">;
+type ControlledInputProps<T extends FieldValues> =
+  InputHTMLAttributes<HTMLInputElement> & {
+    name: Path<T>;
+    label?: string;
+    className?: string;
+    sanitize?: (value: string) => string;
+  };
 
-export function ControlledInput<T extends FieldValues>({
-  className,
-  type,
+const ControlledInput = <T extends FieldValues>({
   name,
   label,
-  containerClassName,
+  className,
   sanitize,
-  ...props
-}: ControlledInputProps<T>) {
-  const { control } = useFormContext<T>();
+  ...rest
+}: ControlledInputProps<T>) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<T>();
+
+  const uniqueId = useId();
+  const inputId = `${name}-${uniqueId}`;
+  const errorId = `${name}-error-${uniqueId}`;
+  const error = errors[name]?.message as string | undefined;
+
+  const registration = register(name);
 
   return (
-    <div className={cn("w-full", containerClassName)}>
-      {!!label && (
-        <Label className="mb-2" htmlFor={name}>
+    <div className="space-y-1.5">
+      {label && (
+        <Label htmlFor={inputId} className="text-sm font-medium">
           {label}
         </Label>
       )}
-      <Controller
-        name={name}
-        control={control}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <Input
-              type={type}
-              id={name}
-              data-slot="input"
-              aria-invalid={!!error}
-              {...field}
-              onChange={(e) => {
-                const value = sanitize
-                  ? sanitize(e.target.value)
-                  : e.target.value;
-                field.onChange(value);
-              }}
-              {...props}
-            />
-            {!!error && (
-              <p className="text-destructive text-sm">{error.message}</p>
-            )}
-          </>
+      <Input
+        id={inputId}
+        {...registration}
+        onChange={(e) => {
+          if (sanitize) {
+            e.target.value = sanitize(e.target.value);
+          }
+          registration.onChange(e);
+        }}
+        className={cn(
+          error && "border-destructive focus-visible:ring-destructive/40",
+          className,
         )}
+        aria-invalid={!!error}
+        aria-describedby={error ? errorId : undefined}
+        {...rest}
       />
+      {error && (
+        <p
+          id={errorId}
+          className="text-xs font-medium text-destructive"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
-}
+};
+
+export { ControlledInput };

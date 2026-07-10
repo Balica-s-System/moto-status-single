@@ -1,20 +1,41 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { CircleOff } from "lucide-react";
+import { PackageOpen, Plus } from "lucide-react";
+import { motion } from "framer-motion";
 
 type NoItemsFoundProps = {
   onClick: () => void;
+  title?: string;
+  description?: string;
+  buttonLabel?: string;
 };
 
-const NoItemsFound = ({ onClick }: NoItemsFoundProps) => {
+const NoItemsFound = ({
+  onClick,
+  title = "Nenhum item encontrado",
+  description = "Comece adicionando o primeiro registro",
+  buttonLabel = "Adicionar novo item",
+}: NoItemsFoundProps) => {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      <CircleOff className="text-primary mb-2" />
-      <h3 className="text-lg font-medium">Nenhum item encontrado</h3>
-      <p className="text-foreground/60 mt-1 text-sm">Tente adicionar novos itens</p>
-      <Button variant="outline" className="mt-4" onClick={onClick}>
-        Adicionar novo item
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-16 text-center"
+    >
+      <div className="mb-4 flex size-14 items-center justify-center rounded-xl bg-muted">
+        <PackageOpen className="size-7 text-muted-foreground" />
+      </div>
+      <h3 className="text-base font-semibold">{title}</h3>
+      <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+        {description}
+      </p>
+      <Button variant="outline" className="mt-5 gap-2" onClick={onClick}>
+        <Plus className="size-4" />
+        {buttonLabel}
       </Button>
-    </div>
+    </motion.div>
   );
 };
 

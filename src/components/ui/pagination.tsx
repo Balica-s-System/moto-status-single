@@ -37,7 +37,7 @@ const Pagination = ({
 
   if (totalPages === undefined) {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center py-2">
         <div className="flex items-center gap-1">
           <Skeleton className="h-9 w-24" />
           <Skeleton className="h-9 w-9" />
@@ -48,6 +48,8 @@ const Pagination = ({
       </div>
     );
   }
+
+  if (totalPages <= 1) return null;
 
   const generatePagination = () => {
     const pages: (number | "ellipsis")[] = [];
@@ -91,27 +93,27 @@ const Pagination = ({
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label="Paginação"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn("mx-auto flex w-full justify-center py-2", className)}
     >
       <ul className="flex flex-row items-center gap-1">
         <li>
           <button
             onClick={() => handlePageUpdate("prev")}
             disabled={currentPage === 1}
-            aria-label="Go to previous page"
+            aria-label="Ir para página anterior"
             className={cn(
               buttonVariants({
                 variant: "ghost",
                 size: "default",
               }),
-              "gap-1 px-2.5 sm:pl-2.5",
+              "gap-1 px-2.5 touch-target",
               currentPage === 1 && "pointer-events-none opacity-50",
             )}
           >
-            <ChevronLeftIcon />
-            <span className="hidden sm:block">Previous</span>
+            <ChevronLeftIcon aria-hidden="true" />
+            <span className="hidden sm:block">Anterior</span>
           </button>
         </li>
 
@@ -119,23 +121,24 @@ const Pagination = ({
           <li key={`${page}-${i}`} data-slot="pagination-item">
             {page === "ellipsis" ? (
               <span
-                aria-hidden
+                aria-hidden="true"
                 data-slot="pagination-ellipsis"
                 className="flex size-9 items-center justify-center"
               >
                 <MoreHorizontalIcon className="size-4" />
-                <span className="sr-only">More pages</span>
               </span>
             ) : (
               <button
                 onClick={() => handlePageUpdate(page)}
                 aria-current={currentPage === page ? "page" : undefined}
+                aria-label={`Página ${page}`}
                 data-active={currentPage === page}
                 className={cn(
                   buttonVariants({
                     variant: currentPage === page ? "outline" : "ghost",
                     size: "icon",
                   }),
+                  "touch-target",
                 )}
               >
                 {page}
@@ -148,18 +151,18 @@ const Pagination = ({
           <button
             onClick={() => handlePageUpdate("next")}
             disabled={currentPage === totalPages}
-            aria-label="Go to next page"
+            aria-label="Ir para próxima página"
             className={cn(
               buttonVariants({
                 variant: "ghost",
                 size: "default",
               }),
-              "gap-1 px-2.5 sm:pr-2.5",
+              "gap-1 px-2.5 touch-target",
               currentPage === totalPages && "pointer-events-none opacity-50",
             )}
           >
-            <span className="hidden sm:block">Next</span>
-            <ChevronRightIcon />
+            <span className="hidden sm:block">Próxima</span>
+            <ChevronRightIcon aria-hidden="true" />
           </button>
         </li>
       </ul>
