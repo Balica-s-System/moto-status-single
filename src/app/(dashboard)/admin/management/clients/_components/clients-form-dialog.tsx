@@ -33,6 +33,8 @@ import {
 import { useAvailableMotorcycles } from "../_services/use-client-queries";
 import { maskDocument } from "@/lib/format";
 import { Loading } from "@/app/(dashboard)/_components/loading";
+import InventoryFormDialog from "../../inventory/_components/inventory-form-dialog";
+import { useInventoryStore } from "../../inventory/_libs/use-inventory-store";
 
 type ClientsFormDialogProps = {
   smallTrigger?: boolean;
@@ -51,6 +53,8 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
     updateClientDialogOpen,
   } = useClientStore();
 
+  const { inventoryDialogOpen } = useInventoryStore();
+
   const clientQuery = useClient();
   const createClientMutation = useCreateClient();
   const updateClientMutation = useUpdateClient();
@@ -63,6 +67,8 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
 
   const isPending =
     createClientMutation.isPending || updateClientMutation.isPending;
+
+  const disabledSubmit = clientDialogOpen || inventoryDialogOpen;
 
   useEffect(() => {
     if (selectedClientId && clientQuery.data) {
@@ -129,7 +135,10 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
         {selectedClientId && clientQuery.isLoading ? (
           <Loading />
         ) : (
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={disabledSubmit ? undefined : form.handleSubmit(onSubmit)}
+            className="space-y-6"
+          >
             <FormProvider {...form}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
@@ -173,7 +182,7 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
                   />
                 </div>
 
-                <div className="col-span-2">
+                <div className="col-span-2 flex items-end">
                   <ControlledCombobox<ClientSchema>
                     name="motorcycleIds"
                     label="Motocicletas"
@@ -183,6 +192,7 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
                     loading={availableMotorcyclesQuery.isLoading}
                     onSearch={setMotorcycleSearch}
                   />
+                  <InventoryFormDialog smallTrigger />
                 </div>
               </div>
             </FormProvider>
