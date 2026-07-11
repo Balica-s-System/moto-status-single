@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Tabs value={getDefaultTab()}>
           <TabsList>
             <TabsTrigger value="users" asChild>
-              <Link href="/admin/management/users">
+              <Link href="/admin/settings/users">
                 <ShieldIcon />
                 Usuários
               </Link>

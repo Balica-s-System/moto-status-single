@@ -71,7 +71,7 @@ const ROUTE_GROUPS: RouteGroup[] = [
     group: "Conta",
     items: [
       {
-        href: "/admin/settings/profile",
+        href: "/admin/account/profile",
         label: "Perfil",
         icon: <User2Icon className="size-4" />,
       },
