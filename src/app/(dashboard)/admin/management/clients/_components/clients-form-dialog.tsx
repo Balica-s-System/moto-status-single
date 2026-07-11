@@ -68,7 +68,7 @@ const ClientsFormDialog = ({ smallTrigger }: ClientsFormDialogProps) => {
   const isPending =
     createClientMutation.isPending || updateClientMutation.isPending;
 
-  const disabledSubmit = clientDialogOpen || inventoryDialogOpen;
+  const disabledSubmit = inventoryDialogOpen;
 
   useEffect(() => {
     if (selectedClientId && clientQuery.data) {
