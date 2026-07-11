@@ -91,7 +91,7 @@ type DashboardLayoutProps = {
 const SIDEBAR_WIDTH = 256;
 
 const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
@@ -111,12 +111,10 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
     return () => mql.removeEventListener("change", onChange);
   }, []);
 
-  // Close mobile sidebar on navigation
   useEffect(() => {
     if (isMobile) setMobileOpen(false);
   }, [pathname, isMobile]);
 
-  // Keyboard: Escape closes mobile sidebar
   useEffect(() => {
     if (!mobileOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -154,7 +152,6 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [mobileOpen]);
 
-  // Lock body scroll while mobile sidebar is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -269,13 +266,16 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                   {user.email}
                 </p>
               </div>
-              <ChevronDown className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <ChevronDown
+                className="size-4 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
             side="top"
-            className="w-[var(--radix-dropdown-menu-trigger-width)]"
+            className="w-(--radix-dropdown-menu-trigger-width)"
           >
             <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -378,7 +378,11 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
 
           {/* Logo visible when sidebar hidden */}
           {(!sidebarOpen || isMobile) && (
-            <Link href="/admin" className="flex items-center" aria-label="Auge Motos - Início">
+            <Link
+              href="/admin"
+              className="flex items-center"
+              aria-label="Auge Motos - Início"
+            >
               <Image
                 src="/logo-auge.png"
                 alt=""
@@ -435,7 +439,10 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
         </header>
 
         {/* Page Content */}
-        <main className="scrollbar-thin flex-1 overflow-y-auto" id="main-content">
+        <main
+          className="scrollbar-thin flex-1 overflow-y-auto"
+          id="main-content"
+        >
           {children}
         </main>
       </motion.div>
@@ -480,7 +487,7 @@ const SidebarGroup = ({ group, items, currentPath }: SidebarGroupProps) => {
                 {isActive && (
                   <motion.div
                     layoutId="sidebar-active-indicator"
-                    className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full bg-primary"
+                    className="absolute left-0 top-1.5 bottom-1.5 w-0.75 rounded-full bg-primary"
                     transition={{ duration: 0.2, ease: "easeInOut" }}
                     aria-hidden="true"
                   />
