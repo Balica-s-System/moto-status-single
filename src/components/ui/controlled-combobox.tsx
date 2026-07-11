@@ -93,16 +93,23 @@ const ControlledCombobox = <T extends FieldValues>({
                             className="gap-1"
                           >
                             {item.label}
-                            <button
-                              type="button"
-                              className="ml-1 hover:text-foreground"
+                            <span
+                              role="button"
+                              tabIndex={0}
+                              className="ml-1 hover:text-foreground cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleItem(item.id);
                               }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  toggleItem(item.id);
+                                }
+                              }}
                             >
                               <X className="size-3" />
-                            </button>
+                            </span>
                           </Badge>
                         ))
                       ) : (
