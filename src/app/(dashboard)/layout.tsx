@@ -24,7 +24,7 @@ const Layout = async ({ children }: LayoutProps) => {
         image: session.user.image ?? null,
       }}
     >
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">{children}</div>
+      <div className="max-w-screen-2xl px-4 py-6 sm:px-6">{children}</div>
     </DashboardLayout>
   );
 };
