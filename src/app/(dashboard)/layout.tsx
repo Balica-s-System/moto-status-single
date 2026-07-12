@@ -23,7 +23,7 @@ const Layout = async ({ children }: LayoutProps) => {
         role: session.user.role ?? "user",
       }}
     >
-      {children}
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">{children}</div>
     </DashboardLayout>
   );
 };

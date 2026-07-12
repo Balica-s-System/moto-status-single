@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
 
   const getDefaultTab = () => {
-    if (pathname.includes("/admin/settings/users")) return "users";
+    if (pathname.includes("/settings/users")) return "users";
     return "users";
   };
 
@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Tabs value={getDefaultTab()}>
           <TabsList>
             <TabsTrigger value="users" asChild>
-              <Link href="/admin/settings/users">
+              <Link href="/settings/users">
                 <ShieldIcon />
                 Usuários
               </Link>

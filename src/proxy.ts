@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
-const protectedRoutes = ["/admin"];
+const protectedRoutes = ["/dashboard", "/management", "/settings", "/account"];
 const authRoutes = ["/login", "/register"];
 
 export async function proxy(request: NextRequest) {
@@ -18,12 +18,12 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isAuthRoute && sessionCookie) {
-    return NextResponse.redirect(new URL("/admin", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/management/:path*", "/settings/:path*", "/account/:path*", "/login", "/register"],
 };

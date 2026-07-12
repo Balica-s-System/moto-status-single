@@ -19,6 +19,7 @@ import {
   Menu,
   PanelLeft,
   ShieldIcon,
+  SquareActivity,
   User2Icon,
   Users2Icon,
   X,
@@ -46,12 +47,17 @@ const ROUTE_GROUPS: RouteGroup[] = [
     group: "Administração",
     items: [
       {
-        href: "/admin/management/clients",
+        href: "/dashboard",
+        label: "Dashboard",
+        icon: <SquareActivity />,
+      },
+      {
+        href: "/management/clients",
         label: "Clientes",
         icon: <Users2Icon className="size-4" />,
       },
       {
-        href: "/admin/management/inventory",
+        href: "/management/inventory",
         label: "Estoque",
         icon: <BoxIcon className="size-4" />,
       },
@@ -61,7 +67,7 @@ const ROUTE_GROUPS: RouteGroup[] = [
     group: "Configurações",
     items: [
       {
-        href: "/admin/settings/users",
+        href: "/settings/users",
         label: "Usuários",
         icon: <ShieldIcon className="size-4" />,
       },
@@ -71,7 +77,7 @@ const ROUTE_GROUPS: RouteGroup[] = [
     group: "Conta",
     items: [
       {
-        href: "/admin/account/profile",
+        href: "/account/profile",
         label: "Perfil",
         icon: <User2Icon className="size-4" />,
       },
@@ -198,7 +204,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
       {/* Sidebar Header */}
       <div className="flex h-14 shrink-0 items-center justify-between px-4">
         <Link
-          href="/admin"
+          href="/dashboard"
           className="flex items-center gap-2.5"
           aria-label="Ir para o painel principal"
         >
@@ -379,7 +385,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
           {/* Logo visible when sidebar hidden */}
           {(!sidebarOpen || isMobile) && (
             <Link
-              href="/admin"
+              href="/dashboard"
               className="flex items-center"
               aria-label="Auge Motos - Início"
             >

@@ -11,9 +11,9 @@ const Layout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
 
   const getDefaultTab = () => {
-    if (pathname.includes("/admin/management/clients")) return "clients";
-    if (pathname.includes("/admin/management/inventory")) return "inventory";
-    if (pathname.includes("/admin/management/users")) return "users";
+    if (pathname.includes("/management/clients")) return "clients";
+    if (pathname.includes("/management/inventory")) return "inventory";
+    if (pathname.includes("/management/users")) return "users";
     return "clients";
   };
 
@@ -23,13 +23,13 @@ const Layout = ({ children }: LayoutProps) => {
         <Tabs value={getDefaultTab()}>
           <TabsList>
             <TabsTrigger value="clients" asChild>
-              <Link href="/admin/management/clients">
+              <Link href="/management/clients">
                 <Users2Icon />
                 Clientes
               </Link>
             </TabsTrigger>
             <TabsTrigger value="inventory" asChild>
-              <Link href="/admin/management/inventory">
+              <Link href="/management/inventory">
                 <BoxIcon />
                 Estoque
               </Link>

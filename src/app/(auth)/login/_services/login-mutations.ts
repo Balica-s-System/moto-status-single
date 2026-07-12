@@ -12,7 +12,7 @@ const login = async (data: LoginSchema) => {
         body: {
           email: validatedData.email,
           password: validatedData.password,
-          callbackURL: `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/admin`,
+          callbackURL: `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/dashboard`,
         },
       });
     },

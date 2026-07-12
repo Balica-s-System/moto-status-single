@@ -10,7 +10,7 @@ const useRegister = () => {
       await register(data);
     },
     onSuccess: () => {
-      router.push("/admin");
+      router.push("/dashboard");
     },
   });
 };

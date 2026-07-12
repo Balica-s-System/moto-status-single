@@ -10,7 +10,7 @@ const useLogin = () => {
       await login(data);
     },
     onSuccess: () => {
-      router.push("/admin");
+      router.push("/dashboard");
     },
   });
 };

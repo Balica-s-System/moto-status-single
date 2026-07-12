@@ -8,8 +8,8 @@ const Page = async () => {
     headers: await headers(),
   });
 
-  if (session?.user?.role === "admin") redirect("/admin");
-  if (session?.user?.role === "user") redirect("/client");
+  if (session?.user?.role === "admin") redirect("/dashboard");
+  if (session?.user?.role === "user") redirect("/dashboard");
 
   return (
     <div className="flex w-full min-h-screen items-center justify-center">
