@@ -12,6 +12,10 @@ import {
   getClientAcquisition,
   getRecentClients,
   getAvgMotorcyclesPerClient,
+  getDaysSinceLastSale,
+  getUnbilledClients,
+  getRecentActivity,
+  getProjectionStats,
 } from "./dashboardQueries";
 
 const useOverviewStats = () => {
@@ -98,6 +102,34 @@ const useAvgMotorcyclesPerClient = () => {
   });
 };
 
+const useDaysSinceLastSale = () => {
+  return useQuery({
+    queryKey: ["dashboard", "daysSinceLastSale"],
+    queryFn: getDaysSinceLastSale,
+  });
+};
+
+const useUnbilledClients = (limit = 5) => {
+  return useQuery({
+    queryKey: ["dashboard", "unbilledClients", limit],
+    queryFn: () => getUnbilledClients(limit),
+  });
+};
+
+const useRecentActivity = (limit = 10) => {
+  return useQuery({
+    queryKey: ["dashboard", "recentActivity", limit],
+    queryFn: () => getRecentActivity(limit),
+  });
+};
+
+const useProjectionStats = () => {
+  return useQuery({
+    queryKey: ["dashboard", "projections"],
+    queryFn: getProjectionStats,
+  });
+};
+
 export {
   useOverviewStats,
   useArrivalStatusCounts,
@@ -111,4 +143,8 @@ export {
   useClientAcquisition,
   useRecentClients,
   useAvgMotorcyclesPerClient,
+  useDaysSinceLastSale,
+  useUnbilledClients,
+  useRecentActivity,
+  useProjectionStats,
 };

@@ -63,6 +63,32 @@ type RecentClient = {
   motorcycleCount: number;
 };
 
+type UnbilledClient = {
+  id: string;
+  name: string;
+  city: string;
+  sellersName: string;
+  motorcycleCount: number;
+  createdAt: string;
+};
+
+type Activity = {
+  id: string;
+  type: "sale" | "client_created" | "registered";
+  description: string;
+  date: string;
+};
+
+type ProjectionStats = {
+  stockValue: number;
+  soldValue: number;
+  totalValue: number;
+  stockCount: number;
+  soldCount: number;
+  avgPrice: number;
+  yearDistribution: { year: number; count: number }[];
+};
+
 export type {
   OverviewStats,
   ArrivalStatusCount,
@@ -75,4 +101,7 @@ export type {
   StalledMotorcycle,
   ClientAcquisition,
   RecentClient,
+  UnbilledClient,
+  Activity,
+  ProjectionStats,
 };

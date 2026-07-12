@@ -13,6 +13,9 @@ import type {
   StalledMotorcycle,
   ClientAcquisition,
   RecentClient,
+  UnbilledClient,
+  Activity,
+  ProjectionStats,
 } from "../_types/dashboardSchema";
 
 const getOverviewStats = async (): Promise<OverviewStats> => {
@@ -268,6 +271,144 @@ const getAvgMotorcyclesPerClient = async (): Promise<number> => {
     : 0;
 };
 
+const getDaysSinceLastSale = async (): Promise<number | null> => {
+  const lastSale = await db.client.findFirst({
+    where: { billingDate: { not: null } },
+    orderBy: { billingDate: "desc" },
+    select: { billingDate: true },
+  });
+
+  if (!lastSale?.billingDate) return null;
+
+  return Math.floor(
+    (Date.now() - lastSale.billingDate.getTime()) / 86400000,
+  );
+};
+
+const getUnbilledClients = async (
+  limit = 5,
+): Promise<UnbilledClient[]> => {
+  const result = await db.client.findMany({
+    where: { billingDate: null, motorcycles: { some: {} } },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      sellersName: true,
+      createdAt: true,
+      _count: { select: { motorcycles: true } },
+    },
+  });
+
+  return result.map((r) => ({
+    id: r.id,
+    name: r.name,
+    city: r.city,
+    sellersName: r.sellersName,
+    createdAt: r.createdAt.toISOString(),
+    motorcycleCount: r._count.motorcycles,
+  }));
+};
+
+const getProjectionStats = async (): Promise<ProjectionStats> => {
+  const [stockAgg, soldAgg, totalAgg, yearDist] = await Promise.all([
+    db.motorcycle.aggregate({
+      where: { clientId: null, price: { not: null } },
+      _sum: { price: true },
+      _count: { id: true },
+    }),
+    db.motorcycle.aggregate({
+      where: { clientId: { not: null }, price: { not: null } },
+      _sum: { price: true },
+      _count: { id: true },
+    }),
+    db.motorcycle.aggregate({
+      where: { price: { not: null } },
+      _sum: { price: true },
+      _avg: { price: true },
+    }),
+    db.motorcycle.groupBy({
+      by: ["year"],
+      _count: { id: true },
+      orderBy: { year: "desc" },
+    }),
+  ]);
+
+  return {
+    stockValue: Number(stockAgg._sum.price ?? 0),
+    soldValue: Number(soldAgg._sum.price ?? 0),
+    totalValue: Number(totalAgg._sum.price ?? 0),
+    stockCount: stockAgg._count.id,
+    soldCount: soldAgg._count.id,
+    avgPrice: Number(totalAgg._avg.price ?? 0),
+    yearDistribution: yearDist
+      .filter((y) => y.year !== null)
+      .map((y) => ({ year: y.year!, count: y._count.id })),
+  };
+};
+
+const getRecentActivity = async (limit = 10): Promise<Activity[]> => {
+  const [sales, clients, registrations] = await Promise.all([
+    db.client.findMany({
+      where: { billingDate: { not: null } },
+      orderBy: { billingDate: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        billingDate: true,
+        sellersName: true,
+      },
+    }),
+    db.client.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: { id: true, name: true, createdAt: true, sellersName: true },
+    }),
+    db.motorcycle.findMany({
+      where: { registrationDate: { not: null } },
+      orderBy: { registrationDate: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        chassi: true,
+        model: true,
+        registrationDate: true,
+        client: { select: { name: true } },
+      },
+    }),
+  ]);
+
+  const activities: Activity[] = [
+    ...sales.map((s) => ({
+      id: `sale-${s.id}`,
+      type: "sale" as const,
+      description: `${s.name} — Venda (${s.sellersName})`,
+      date: s.billingDate!.toISOString(),
+    })),
+    ...clients.map((c) => ({
+      id: `client-${c.id}`,
+      type: "client_created" as const,
+      description: `${c.name} — Novo cliente`,
+      date: c.createdAt.toISOString(),
+    })),
+    ...registrations.map((r) => ({
+      id: `reg-${r.id}`,
+      type: "registered" as const,
+      description: `${r.model} ${r.chassi.slice(-4)} — Emplacada${r.client ? ` (${r.client.name})` : ""}`,
+      date: r.registrationDate!.toISOString(),
+    })),
+  ];
+
+  activities.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  return activities.slice(0, limit);
+};
+
 export {
   getOverviewStats,
   getArrivalStatusCounts,
@@ -281,4 +422,8 @@ export {
   getClientAcquisition,
   getRecentClients,
   getAvgMotorcyclesPerClient,
+  getDaysSinceLastSale,
+  getUnbilledClients,
+  getRecentActivity,
+  getProjectionStats,
 };
