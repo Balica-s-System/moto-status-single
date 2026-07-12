@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <div className="space-y-6">
+    <>
       <PageHeader
         title="Vendas"
         description="Desempenho comercial e métricas de vendas"
       />
       <SalesPage />
-    </div>
+    </>
   );
 };
 

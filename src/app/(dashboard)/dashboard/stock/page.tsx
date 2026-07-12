@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <div className="space-y-6">
+    <>
       <PageHeader
         title="Estoque"
         description="Pipeline de motos e status do inventário"
       />
       <StockPage />
-    </div>
+    </>
   );
 };
 

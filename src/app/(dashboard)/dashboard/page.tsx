@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <div className="space-y-6">
+    <>
       <PageHeader
         title="Dashboard"
         description="Visão geral do sistema"
       />
       <AlertBar />
       <DashboardPage />
-    </div>
+    </>
   );
 };
 

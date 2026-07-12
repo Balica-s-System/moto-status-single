@@ -16,7 +16,7 @@ import {
 } from "../../_services/use-dashboard-queries";
 
 const StockPageSkeleton = () => (
-  <div className="space-y-4">
+  <div className="min-h-[850px] space-y-6">
     <div className="grid gap-4 md:grid-cols-2">
       <Card>
         <CardHeader><Skeleton className="h-5 w-40" /></CardHeader>
@@ -48,7 +48,7 @@ const StockPage = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
         <ForecastChart data={forecastQuery.data ?? []} />
         <TopModelsChart data={topModelsQuery.data ?? []} />

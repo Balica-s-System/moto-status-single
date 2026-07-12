@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -46,10 +47,27 @@ const SalesChart = ({ data }: SalesChartProps) => {
     label: formatMonth(item.month),
   }));
 
+  const current = data[data.length - 1]?.count ?? 0;
+  const previous = data[data.length - 2]?.count ?? 0;
+  const diff =
+    previous > 0
+      ? ((current - previous) / previous) * 100
+      : 0;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Vendas (últimos 3 meses)</CardTitle>
+        <div className="flex items-center gap-3">
+          <CardTitle>Vendas (últimos 3 meses)</CardTitle>
+          {chartData.length >= 2 && diff !== 0 && (
+            <Badge
+              variant={diff > 0 ? "default" : "destructive"}
+              className="gap-1"
+            >
+              {diff > 0 ? "↑" : "↓"} {Math.abs(diff).toFixed(0)}%
+            </Badge>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
