@@ -21,6 +21,7 @@ const Layout = async ({ children }: LayoutProps) => {
         name: session.user.name,
         email: session.user.email,
         role: session.user.role ?? "user",
+        image: session.user.image ?? null,
       }}
     >
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">{children}</div>

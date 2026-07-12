@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -91,6 +91,7 @@ type DashboardLayoutProps = {
     name: string;
     email: string;
     role: string;
+    image?: string | null;
   };
 };
 
@@ -262,6 +263,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
               aria-label={`Menu do usuário ${user.name}`}
             >
               <Avatar className="size-8 ring-2 ring-border">
+                {user.image && <AvatarImage src={user.image} alt={user.name} />}
                 <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                   {initials}
                 </AvatarFallback>
@@ -413,6 +415,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                   aria-label="Menu do usuário"
                 >
                   <Avatar className="size-7">
+                    {user.image && <AvatarImage src={user.image} alt={user.name} />}
                     <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                       {initials}
                     </AvatarFallback>
@@ -424,6 +427,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                 <DropdownMenuSeparator />
                 <div className="flex items-center gap-3 px-2 py-1.5">
                   <Avatar className="size-9">
+                    {user.image && <AvatarImage src={user.image} alt={user.name} />}
                     <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                       {initials}
                     </AvatarFallback>
