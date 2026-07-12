@@ -4,6 +4,14 @@ import {
   getArrivalStatusCounts,
   getRegistrationStatusCounts,
   getSalesByMonth,
+  getSalesBySeller,
+  getSalesByCity,
+  getForecastArrivals,
+  getTopModels,
+  getStalledMotorcycles,
+  getClientAcquisition,
+  getRecentClients,
+  getAvgMotorcyclesPerClient,
 } from "./dashboardQueries";
 
 const useOverviewStats = () => {
@@ -34,9 +42,73 @@ const useSalesByMonth = (months = 3) => {
   });
 };
 
+const useSalesBySeller = () => {
+  return useQuery({
+    queryKey: ["dashboard", "salesBySeller"],
+    queryFn: getSalesBySeller,
+  });
+};
+
+const useSalesByCity = () => {
+  return useQuery({
+    queryKey: ["dashboard", "salesByCity"],
+    queryFn: getSalesByCity,
+  });
+};
+
+const useForecastArrivals = (months = 3) => {
+  return useQuery({
+    queryKey: ["dashboard", "forecastArrivals", months],
+    queryFn: () => getForecastArrivals(months),
+  });
+};
+
+const useTopModels = (limit = 5) => {
+  return useQuery({
+    queryKey: ["dashboard", "topModels", limit],
+    queryFn: () => getTopModels(limit),
+  });
+};
+
+const useStalledMotorcycles = (days = 30, limit = 5) => {
+  return useQuery({
+    queryKey: ["dashboard", "stalled", days, limit],
+    queryFn: () => getStalledMotorcycles(days, limit),
+  });
+};
+
+const useClientAcquisition = (months = 6) => {
+  return useQuery({
+    queryKey: ["dashboard", "clientAcquisition", months],
+    queryFn: () => getClientAcquisition(months),
+  });
+};
+
+const useRecentClients = (limit = 5) => {
+  return useQuery({
+    queryKey: ["dashboard", "recentClients", limit],
+    queryFn: () => getRecentClients(limit),
+  });
+};
+
+const useAvgMotorcyclesPerClient = () => {
+  return useQuery({
+    queryKey: ["dashboard", "avgMotorcyclesPerClient"],
+    queryFn: getAvgMotorcyclesPerClient,
+  });
+};
+
 export {
   useOverviewStats,
   useArrivalStatusCounts,
   useRegistrationStatusCounts,
   useSalesByMonth,
+  useSalesBySeller,
+  useSalesByCity,
+  useForecastArrivals,
+  useTopModels,
+  useStalledMotorcycles,
+  useClientAcquisition,
+  useRecentClients,
+  useAvgMotorcyclesPerClient,
 };

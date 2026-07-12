@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
-import DashboardPage from "./_components/dashboard-page";
-import { AlertBar } from "./_components/alert-bar";
+import SalesPage from "./_components/sales-page";
 import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Auge Motos",
+  title: "Vendas | Auge Motos",
 };
 
 const Page = () => {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Dashboard"
-        description="Visão geral do sistema"
+        title="Vendas"
+        description="Desempenho comercial e métricas de vendas"
       />
-      <AlertBar />
-      <DashboardPage />
+      <SalesPage />
     </div>
   );
 };

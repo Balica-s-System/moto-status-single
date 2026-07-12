@@ -15,32 +15,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { SalesByMonth } from "../_types/dashboardSchema";
+import type { ForecastArrival } from "../_types/dashboardSchema";
 
-type SalesChartProps = {
-  data: SalesByMonth[];
+type ForecastChartProps = {
+  data: ForecastArrival[];
 };
 
 const formatMonth = (month: string) => {
-  const [year, m] = month.split("-");
+  const [y, m] = month.split("-");
   const months = [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Set",
-    "Out",
-    "Nov",
-    "Dez",
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez",
   ];
-  return `${months[Number(m) - 1]}/${year.slice(2)}`;
+  return `${months[Number(m) - 1]}/${y.slice(2)}`;
 };
 
-const SalesChart = ({ data }: SalesChartProps) => {
+const ForecastChart = ({ data }: ForecastChartProps) => {
   const chartData = data.map((item) => ({
     ...item,
     label: formatMonth(item.month),
@@ -49,12 +39,15 @@ const SalesChart = ({ data }: SalesChartProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Vendas (últimos 3 meses)</CardTitle>
+        <CardTitle>Previsão de Chegadas</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            >
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis
                 dataKey="label"
@@ -72,7 +65,7 @@ const SalesChart = ({ data }: SalesChartProps) => {
                   border: "1px solid var(--border)",
                 }}
                 labelFormatter={(label) => `Mês: ${label}`}
-                formatter={(value) => [`${value} motos`, "Vendas"]}
+                formatter={(value) => [`${value} motos`, "Previstas"]}
               />
               <Bar
                 dataKey="count"
@@ -87,4 +80,4 @@ const SalesChart = ({ data }: SalesChartProps) => {
   );
 };
 
-export { SalesChart };
+export { ForecastChart };
