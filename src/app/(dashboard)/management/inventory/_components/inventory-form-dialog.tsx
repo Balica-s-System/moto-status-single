@@ -144,6 +144,25 @@ const InventoryFormDialog = ({ smallTrigger }: InventoryFormDialogProps) => {
                 </div>
 
                 <div className="col-span-1">
+                  <ControlledInput<MotorcycleSchema>
+                    name="year"
+                    label="Ano"
+                    placeholder="Ex: 2025"
+                    type="number"
+                  />
+                </div>
+
+                <div className="col-span-1">
+                  <ControlledInput<MotorcycleSchema>
+                    name="price"
+                    label="Preço (R$)"
+                    placeholder="Ex: 25000"
+                    type="number"
+                    step="0.01"
+                  />
+                </div>
+
+                <div className="col-span-1">
                   <ControlledDatePicker<MotorcycleSchema>
                     name="forecastArrival"
                     label="Previsão de Chegada"

@@ -78,6 +78,10 @@ const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
     forecastArrivalStatus: res?.forecastArrivalStatus ?? "NO_INFORMATION",
     registrationDate: toDateString(res?.registrationDate),
     registrationStatus: res?.registrationStatus ?? null,
+    year: res?.year ?? undefined,
+    price: res?.price !== null && res?.price !== undefined
+      ? Number(res.price)
+      : undefined,
   };
 };
 

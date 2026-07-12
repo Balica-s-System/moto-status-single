@@ -97,6 +97,8 @@ export const MotorcycleScalarFieldEnum = {
   forecastArrivalStatus: 'forecastArrivalStatus',
   registrationStatus: 'registrationStatus',
   registrationDate: 'registrationDate',
+  year: 'year',
+  price: 'price',
   clientId: 'clientId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -97,6 +97,23 @@ const InventoryPreviewDialog = () => {
             </div>
 
             <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Ano</p>
+              <p className="font-medium">{item.year ?? "-"}</p>
+            </div>
+
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Preço</p>
+              <p className="font-medium">
+                {item.price
+                  ? item.price.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })
+                  : "-"}
+              </p>
+            </div>
+
+            <div className="space-y-1">
               <p className="text-sm text-muted-foreground">
                 Previsão de Chegada
               </p>

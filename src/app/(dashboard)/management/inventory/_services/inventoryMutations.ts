@@ -13,6 +13,13 @@ const deleteMotorcycle = async (id: string) => {
 const toDateOrNull = (value: string | null | undefined): Date | null =>
   value ? parse(value, "yyyy-MM-dd", new Date()) : null;
 
+const toNumberOrNull = (value: string | number | undefined | null): number | null => {
+  if (value === "" || value === null || value === undefined) return null;
+  if (typeof value === "number" && !Number.isNaN(value)) return value;
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? null : parsed;
+};
+
 const createMotorcycle = async (data: MotorcycleSchema) => {
   await executeAction({
     actionFn: () =>
@@ -25,6 +32,8 @@ const createMotorcycle = async (data: MotorcycleSchema) => {
           registrationStatus:
             data.registrationStatus as RegistrationStatus | null,
           registrationDate: toDateOrNull(data.registrationDate),
+          year: toNumberOrNull(data.year),
+          price: toNumberOrNull(data.price),
         },
       }),
   });
@@ -46,6 +55,8 @@ const updateMotorcycle = async (data: MotorcycleSchema) => {
             registrationStatus:
               data.registrationStatus as RegistrationStatus | null,
             registrationDate: toDateOrNull(data.registrationDate),
+            year: toNumberOrNull(data.year),
+            price: toNumberOrNull(data.price),
           },
         }),
     });

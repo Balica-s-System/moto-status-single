@@ -24,6 +24,8 @@ import {
   Hash,
   Calendar,
   MoreVertical,
+  DollarSign,
+  CalendarIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -270,6 +272,36 @@ const InventoryTable = () => {
             <span className="font-mono text-xs">{row.original.chassi}</span>
           </ClickToCopy>
         ),
+      },
+      {
+        accessorKey: "year",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <CalendarIcon className="size-4" aria-hidden="true" />
+            Ano
+          </span>
+        ),
+        cell: ({ row }) => (
+          <span>{row.original.year ?? "-"}</span>
+        ),
+      },
+      {
+        accessorKey: "price",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <DollarSign className="size-4" aria-hidden="true" />
+            Preço
+          </span>
+        ),
+        cell: ({ row }) => {
+          const price = row.original.price;
+          return price
+            ? price.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })
+            : "-";
+        },
       },
       {
         accessorKey: "forecastArrival",
