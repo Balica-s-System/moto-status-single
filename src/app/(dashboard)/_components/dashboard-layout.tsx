@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Footer } from "@/components/footer";
 import {
   BoxIcon,
   ChevronDown,
@@ -450,10 +451,11 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
 
         {/* Page Content */}
         <main
-          className="scrollbar-thin flex-1 overflow-y-auto"
+          className="scrollbar-thin flex flex-1 flex-col overflow-y-auto"
           id="main-content"
         >
           {children}
+          <Footer />
         </main>
       </motion.div>
     </div>
