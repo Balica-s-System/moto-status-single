@@ -10,12 +10,11 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <>
-      <PageHeader
-        title="Dashboard"
-        description="Visão geral do sistema"
-      />
-      <AlertBar />
-      <DashboardPage />
+      <PageHeader title="Dashboard" description="Visão geral do sistema" />
+      <div className="space-y-6">
+        <AlertBar />
+        <DashboardPage />
+      </div>
     </>
   );
 };

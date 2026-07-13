@@ -1,23 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   useArrivalStatusCounts,
   useStalledMotorcycles,
   useRegistrationStatusCounts,
 } from "../_services/use-dashboard-queries";
-import {
-  AlertTriangle,
-  Clock,
-  FileWarning,
-  PackageOpen,
-} from "lucide-react";
+import { AlertTriangle, Clock, FileWarning, PackageOpen } from "lucide-react";
 
 const AttentionSection = () => {
   const { data: arrivalCounts } = useArrivalStatusCounts();
