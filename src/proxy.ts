@@ -17,9 +17,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isAuthRoute && sessionCookie) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
+  // Optimistic check only — não redireciona com base apenas no cookie
+  // porque o cookie pode existir mesmo com sessão expirada no DB,
+  // causando loop entre /login e /dashboard.
+  // O layout do dashboard e as server actions validam a sessão real.
 
   return NextResponse.next();
 }

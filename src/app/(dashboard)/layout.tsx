@@ -2,16 +2,40 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import DashboardLayout from "./_components/dashboard-layout";
 
 type LayoutProps = { children: React.ReactNode };
 
 const Layout = async ({ children }: LayoutProps) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session;
+  try {
+    session = await auth.api.getSession({
+      headers: await headers(),
+    });
+  } catch {
+    // Erro ao validar sessão (ex: DB indisponível, sessão expirada)
+    // Limpa cookie de sessão para evitar loop no proxy
+    const cookieStore = await cookies();
+    const allCookies = cookieStore.getAll();
+    for (const c of allCookies) {
+      if (c.name.startsWith("better-auth") || c.name.includes("session")) {
+        cookieStore.delete(c.name);
+      }
+    }
+    redirect("/login");
+  }
 
   if (!session) {
+    // Sessão não encontrada — limpa cookies de sessão antes de redirecionar
+    // para evitar que o proxy veja o cookie velho e crie loop
+    const cookieStore = await cookies();
+    const allCookies = cookieStore.getAll();
+    for (const c of allCookies) {
+      if (c.name.startsWith("better-auth") || c.name.includes("session")) {
+        cookieStore.delete(c.name);
+      }
+    }
     redirect("/login");
   }
 
