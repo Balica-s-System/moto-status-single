@@ -1,5 +1,6 @@
 "use server";
 
+import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { UserSchema } from "../_types/userSchema";
 import { PaginatedResult } from "@/lib/types/paginatedResult";
@@ -16,6 +17,7 @@ type UserFilters = {
 const getUsers = async (
   filters: UserFilters,
 ): Promise<PaginatedResult<UserSchema>> => {
+  await requireAdmin();
   const {
     searchTerm,
     page = 1,
@@ -63,6 +65,7 @@ const getUsers = async (
 };
 
 const getUser = async (id: string): Promise<UserSchema> => {
+  await requireAdmin();
   const res = await db.user.findFirst({ where: { id } });
 
   return {

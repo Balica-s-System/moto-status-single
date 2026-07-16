@@ -1,0 +1,406 @@
+"use server";
+
+import { requireAuth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import type {
+  OverviewStats,
+  ArrivalStatusCount,
+  RegistrationStatusCount,
+  SalesByMonth,
+  SalesBySeller,
+  SalesByCity,
+  ForecastArrival,
+  TopModel,
+  StalledMotorcycle,
+  ClientAcquisition,
+  RecentClient,
+  UnbilledClient,
+  Activity,
+} from "../_types/dashboardSchema";
+
+const getOverviewStats = async (): Promise<OverviewStats> => {
+  await requireAuth();
+  const [totalClients, totalMotorcycles, motorcyclesWithClient] =
+    await Promise.all([
+      db.client.count(),
+      db.motorcycle.count(),
+      db.motorcycle.count({ where: { clientId: { not: null } } }),
+    ]);
+
+  return {
+    totalClients,
+    totalMotorcycles,
+    motorcyclesWithClient,
+    motorcyclesWithoutClient: totalMotorcycles - motorcyclesWithClient,
+  };
+};
+
+const getArrivalStatusCounts = async (): Promise<ArrivalStatusCount[]> => {
+  await requireAuth();
+  const [delayed, arrived, noInformation] = await Promise.all([
+    db.motorcycle.count({
+      where: { forecastArrivalStatus: "DELAYED" },
+    }),
+    db.motorcycle.count({
+      where: { forecastArrivalStatus: "ARRIVED" },
+    }),
+    db.motorcycle.count({
+      where: { forecastArrivalStatus: "NO_INFORMATION" },
+    }),
+  ]);
+
+  return [
+    { status: "DELAYED", label: "Atrasado", count: delayed },
+    { status: "ARRIVED", label: "Entregue", count: arrived },
+    {
+      status: "NO_INFORMATION",
+      label: "Sem Informação",
+      count: noInformation,
+    },
+  ];
+};
+
+const getRegistrationStatusCounts =
+  async (): Promise<RegistrationStatusCount[]> => {
+    await requireAuth();
+    const [noPlate, plating, plated] = await Promise.all([
+      db.motorcycle.count({
+        where: { registrationStatus: "NO_PLATE" },
+      }),
+      db.motorcycle.count({
+        where: { registrationStatus: "PLATING" },
+      }),
+      db.motorcycle.count({
+        where: { registrationStatus: "PLATED" },
+      }),
+    ]);
+
+    return [
+      { status: "NO_PLATE", label: "Sem Placa", count: noPlate },
+      {
+        status: "PLATING",
+        label: "Em Emplacamento",
+        count: plating,
+      },
+      { status: "PLATED", label: "Emplacada", count: plated },
+    ];
+  };
+
+const getSalesByMonth = async (
+  months = 3,
+): Promise<SalesByMonth[]> => {
+  await requireAuth();
+  const rows = await db.$queryRaw<
+    { month: string; count: bigint }[]
+  >`
+    SELECT 
+      TO_CHAR(c."billingDate", 'YYYY-MM') as month,
+      COUNT(m.id)::int as count
+    FROM motorcycles m
+    INNER JOIN clients c ON c.id = m."clientId"
+    WHERE c."billingDate" IS NOT NULL
+      AND c."billingDate" >= NOW() - (${months} || ' months')::interval
+    GROUP BY month
+    ORDER BY month ASC
+  `;
+
+  return rows.map((r) => ({ month: r.month, count: Number(r.count) }));
+};
+
+const getSalesBySeller = async (): Promise<SalesBySeller[]> => {
+  await requireAuth();
+  const result = await db.client.groupBy({
+    by: ["sellersName"],
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+  });
+
+  return result.map((r) => ({
+    seller: r.sellersName,
+    count: r._count.id,
+  }));
+};
+
+const getSalesByCity = async (): Promise<SalesByCity[]> => {
+  await requireAuth();
+  const result = await db.client.groupBy({
+    by: ["city"],
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+  });
+
+  return result.map((r) => ({
+    city: r.city,
+    count: r._count.id,
+  }));
+};
+
+const getForecastArrivals = async (
+  months = 3,
+): Promise<ForecastArrival[]> => {
+  await requireAuth();
+  const today = new Date();
+  const futureDate = new Date(
+    today.getFullYear(),
+    today.getMonth() + months,
+    1,
+  );
+
+  const motorcycles = await db.motorcycle.findMany({
+    where: {
+      forecastArrival: {
+        gte: today,
+        lte: futureDate,
+      },
+    },
+    select: {
+      forecastArrival: true,
+    },
+    orderBy: { forecastArrival: "asc" },
+  });
+
+  const monthCounts = new Map<string, number>();
+
+  for (const m of motorcycles) {
+    if (m.forecastArrival) {
+      const key = `${m.forecastArrival.getFullYear()}-${String(m.forecastArrival.getMonth() + 1).padStart(2, "0")}`;
+      monthCounts.set(key, (monthCounts.get(key) ?? 0) + 1);
+    }
+  }
+
+  return Array.from(monthCounts.entries()).map(([month, count]) => ({
+    month,
+    count,
+  }));
+};
+
+const getTopModels = async (limit = 5): Promise<TopModel[]> => {
+  await requireAuth();
+  const result = await db.motorcycle.groupBy({
+    by: ["model"],
+    _count: { id: true },
+    orderBy: { _count: { id: "desc" } },
+    take: limit,
+  });
+
+  return result.map((r) => ({
+    model: r.model,
+    count: r._count.id,
+  }));
+};
+
+const getStalledMotorcycles = async (
+  days = 30,
+  limit = 5,
+): Promise<StalledMotorcycle[]> => {
+  await requireAuth();
+  const cutoff = new Date(Date.now() - days * 86400000);
+
+  const result = await db.motorcycle.findMany({
+    where: {
+      clientId: null,
+      createdAt: { lte: cutoff },
+    },
+    orderBy: { createdAt: "asc" },
+    take: limit,
+    select: {
+      id: true,
+      chassi: true,
+      model: true,
+      createdAt: true,
+    },
+  });
+
+  const now = Date.now();
+  return result.map((r) => ({
+    id: r.id,
+    chassi: r.chassi,
+    model: r.model,
+    daysInStock: Math.floor((now - r.createdAt.getTime()) / 86400000),
+  }));
+};
+
+const getClientAcquisition = async (
+  months = 6,
+): Promise<ClientAcquisition[]> => {
+  await requireAuth();
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - months);
+
+  const clients = await db.client.findMany({
+    where: { createdAt: { gte: cutoff } },
+    select: { createdAt: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const monthCounts = new Map<string, number>();
+
+  for (const c of clients) {
+    const key = `${c.createdAt.getFullYear()}-${String(c.createdAt.getMonth() + 1).padStart(2, "0")}`;
+    monthCounts.set(key, (monthCounts.get(key) ?? 0) + 1);
+  }
+
+  return Array.from(monthCounts.entries()).map(([month, count]) => ({
+    month,
+    count,
+  }));
+};
+
+const getRecentClients = async (limit = 5): Promise<RecentClient[]> => {
+  await requireAuth();
+  const result = await db.client.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      sellersName: true,
+      createdAt: true,
+      _count: { select: { motorcycles: true } },
+    },
+  });
+
+  return result.map((r) => ({
+    id: r.id,
+    name: r.name,
+    city: r.city,
+    sellersName: r.sellersName,
+    createdAt: r.createdAt.toISOString(),
+    motorcycleCount: r._count.motorcycles,
+  }));
+};
+
+const getAvgMotorcyclesPerClient = async (): Promise<number> => {
+  await requireAuth();
+  const [totalMotorcycles, totalClients] = await Promise.all([
+    db.motorcycle.count(),
+    db.client.count(),
+  ]);
+
+  return totalClients > 0
+    ? Number((totalMotorcycles / totalClients).toFixed(1))
+    : 0;
+};
+
+const getDaysSinceLastSale = async (): Promise<number | null> => {
+  await requireAuth();
+  const lastSale = await db.client.findFirst({
+    where: { billingDate: { not: null } },
+    orderBy: { billingDate: "desc" },
+    select: { billingDate: true },
+  });
+
+  if (!lastSale?.billingDate) return null;
+
+  return Math.floor(
+    (Date.now() - lastSale.billingDate.getTime()) / 86400000,
+  );
+};
+
+const getUnbilledClients = async (
+  limit = 5,
+): Promise<UnbilledClient[]> => {
+  await requireAuth();
+  const result = await db.client.findMany({
+    where: { billingDate: null, motorcycles: { some: {} } },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      sellersName: true,
+      createdAt: true,
+      _count: { select: { motorcycles: true } },
+    },
+  });
+
+  return result.map((r) => ({
+    id: r.id,
+    name: r.name,
+    city: r.city,
+    sellersName: r.sellersName,
+    createdAt: r.createdAt.toISOString(),
+    motorcycleCount: r._count.motorcycles,
+  }));
+};
+
+const getRecentActivity = async (limit = 10): Promise<Activity[]> => {
+  await requireAuth();
+  const [sales, clients, registrations] = await Promise.all([
+    db.client.findMany({
+      where: { billingDate: { not: null } },
+      orderBy: { billingDate: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        billingDate: true,
+        sellersName: true,
+      },
+    }),
+    db.client.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: { id: true, name: true, createdAt: true, sellersName: true },
+    }),
+    db.motorcycle.findMany({
+      where: { registrationDate: { not: null } },
+      orderBy: { registrationDate: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        chassi: true,
+        model: true,
+        registrationDate: true,
+        client: { select: { name: true } },
+      },
+    }),
+  ]);
+
+  const activities: Activity[] = [
+    ...sales.map((s) => ({
+      id: `sale-${s.id}`,
+      type: "sale" as const,
+      description: `${s.name} — Venda (${s.sellersName})`,
+      date: s.billingDate!.toISOString(),
+    })),
+    ...clients.map((c) => ({
+      id: `client-${c.id}`,
+      type: "client_created" as const,
+      description: `${c.name} — Novo cliente`,
+      date: c.createdAt.toISOString(),
+    })),
+    ...registrations.map((r) => ({
+      id: `reg-${r.id}`,
+      type: "registered" as const,
+      description: `${r.model} ${r.chassi.slice(-4)} — Emplacada${r.client ? ` (${r.client.name})` : ""}`,
+      date: r.registrationDate!.toISOString(),
+    })),
+  ];
+
+  activities.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  return activities.slice(0, limit);
+};
+
+export {
+  getOverviewStats,
+  getArrivalStatusCounts,
+  getRegistrationStatusCounts,
+  getSalesByMonth,
+  getSalesBySeller,
+  getSalesByCity,
+  getForecastArrivals,
+  getTopModels,
+  getStalledMotorcycles,
+  getClientAcquisition,
+  getRecentClients,
+  getAvgMotorcyclesPerClient,
+  getDaysSinceLastSale,
+  getUnbilledClients,
+  getRecentActivity,
+};

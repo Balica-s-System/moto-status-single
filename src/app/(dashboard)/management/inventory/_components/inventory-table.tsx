@@ -24,6 +24,7 @@ import {
   Hash,
   Calendar,
   MoreVertical,
+  CalendarIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -269,6 +270,18 @@ const InventoryTable = () => {
           <ClickToCopy text={row.original.chassi}>
             <span className="font-mono text-xs">{row.original.chassi}</span>
           </ClickToCopy>
+        ),
+      },
+      {
+        accessorKey: "year",
+        header: () => (
+          <span className="flex items-center gap-1.5">
+            <CalendarIcon className="size-4" aria-hidden="true" />
+            Ano
+          </span>
+        ),
+        cell: ({ row }) => (
+          <span>{row.original.year ?? "-"}</span>
         ),
       },
       {

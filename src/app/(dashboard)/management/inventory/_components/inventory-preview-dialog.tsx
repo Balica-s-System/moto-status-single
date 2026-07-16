@@ -97,6 +97,11 @@ const InventoryPreviewDialog = () => {
             </div>
 
             <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Ano</p>
+              <p className="font-medium">{item.year ?? "-"}</p>
+            </div>
+
+            <div className="space-y-1">
               <p className="text-sm text-muted-foreground">
                 Previsão de Chegada
               </p>

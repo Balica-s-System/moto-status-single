@@ -21,6 +21,7 @@ const baseFields = {
   forecastArrivalStatus: ArrivalStatusEnum,
   registrationStatus: RegistrationStatusEnum.optional().nullable(),
   registrationDate: z.string().optional().nullable(),
+  year: z.union([z.string(), z.number()]).optional(),
 };
 
 const motorcycleSchema = z.discriminatedUnion("action", [
@@ -38,6 +39,7 @@ const motorcycleDefaultValues: MotorcycleSchema = {
   forecastArrivalStatus: "NO_INFORMATION",
   registrationStatus: "NO_PLATE",
   registrationDate: "",
+  year: undefined,
 };
 
 export { motorcycleSchema, motorcycleDefaultValues, type MotorcycleSchema };

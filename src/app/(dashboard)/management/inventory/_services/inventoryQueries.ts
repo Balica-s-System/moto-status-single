@@ -1,6 +1,7 @@
 "use server";
 
 import { format } from "date-fns";
+import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { MotorcycleSchema } from "../_types/motorcycleSchema";
 import { PaginatedResult } from "@/lib/types/paginatedResult";
@@ -13,6 +14,7 @@ import { Prisma } from "$/generated/prisma/browser";
 const getMotorcycles = async (
   filters: MotorcycleFiltersSchema,
 ): Promise<PaginatedResult<MotorcycleSchema>> => {
+  await requireAuth();
   const validatedFilters = motorcycleFiltersSchema.parse(filters);
 
   const {
@@ -28,8 +30,8 @@ const getMotorcycles = async (
 
   if (searchTerm) {
     where.OR = [
-      { model: { contains: searchTerm } },
-      { chassi: { contains: searchTerm } },
+      { model: { contains: searchTerm, mode: "insensitive" } },
+      { chassi: { contains: searchTerm, mode: "insensitive" } },
     ];
   }
 
@@ -63,6 +65,7 @@ const toDateString = (value: Date | null | undefined): string =>
   value ? format(value, "yyyy-MM-dd") : "";
 
 const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
+  await requireAuth();
   const res = await db.motorcycle.findFirst({
     where: {
       id,
@@ -78,6 +81,7 @@ const getMotorcycle = async (id: string): Promise<MotorcycleSchema> => {
     forecastArrivalStatus: res?.forecastArrivalStatus ?? "NO_INFORMATION",
     registrationDate: toDateString(res?.registrationDate),
     registrationStatus: res?.registrationStatus ?? null,
+    year: res?.year ?? undefined,
   };
 };
 

@@ -3,8 +3,10 @@
 import { executeAction } from "@/lib/executeAction";
 import { loginSchema, LoginSchema } from "../_types/loginSchema";
 import { auth } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 const login = async (data: LoginSchema) => {
+  await checkRateLimit();
   await executeAction({
     actionFn: async () => {
       const validatedData = loginSchema.parse(data);
