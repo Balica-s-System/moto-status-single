@@ -36,7 +36,6 @@ model Motorcycle {
   registrationStatus    RegistrationStatus?
   registrationDate      DateTime?
   year                  Int?
-  price                 Decimal?
 
   clientId String?
   client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)

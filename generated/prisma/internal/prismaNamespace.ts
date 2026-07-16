@@ -915,7 +915,6 @@ export const MotorcycleScalarFieldEnum = {
   registrationStatus: 'registrationStatus',
   registrationDate: 'registrationDate',
   year: 'year',
-  price: 'price',
   clientId: 'clientId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1104,20 +1103,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 

@@ -15,7 +15,6 @@ import {
   getDaysSinceLastSale,
   getUnbilledClients,
   getRecentActivity,
-  getProjectionStats,
 } from "./dashboardQueries";
 
 const useOverviewStats = () => {
@@ -123,13 +122,6 @@ const useRecentActivity = (limit = 10) => {
   });
 };
 
-const useProjectionStats = () => {
-  return useQuery({
-    queryKey: ["dashboard", "projections"],
-    queryFn: getProjectionStats,
-  });
-};
-
 export {
   useOverviewStats,
   useArrivalStatusCounts,
@@ -146,5 +138,4 @@ export {
   useDaysSinceLastSale,
   useUnbilledClients,
   useRecentActivity,
-  useProjectionStats,
 };

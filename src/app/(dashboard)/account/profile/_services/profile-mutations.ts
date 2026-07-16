@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth, requireAuth } from "@/lib/auth";
 import { executeAction } from "@/lib/executeAction";
 import { headers } from "next/headers";
 import cloudinary from "@/lib/cloudinary";
@@ -42,6 +42,10 @@ const deleteProfileImage = async () => {
 };
 
 const deleteCloudinaryImage = async (publicId: string) => {
+  await requireAuth();
+  if (!publicId.startsWith("moto-status/avatars/")) {
+    throw new Error("Não autorizado");
+  }
   await cloudinary.uploader.destroy(publicId);
 };
 

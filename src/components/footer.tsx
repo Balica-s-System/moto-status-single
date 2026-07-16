@@ -17,7 +17,7 @@ const Footer = () => {
       <div className="flex items-center justify-center gap-4 px-6 py-4">
         <p className="text-xs text-muted-foreground">
           {year
-            ? `\u00A9 ${year} Balica's System. Todos os direitos reservados.`
+            ? `\u00A9 ${year} Balica Labs. Todos os direitos reservados.`
             : "\u00A0"}
         </p>
         <span className="text-xs text-muted-foreground/40">|</span>

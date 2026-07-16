@@ -1,5 +1,6 @@
 "use server";
 
+import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type {
   OverviewStats,
@@ -15,10 +16,10 @@ import type {
   RecentClient,
   UnbilledClient,
   Activity,
-  ProjectionStats,
 } from "../_types/dashboardSchema";
 
 const getOverviewStats = async (): Promise<OverviewStats> => {
+  await requireAuth();
   const [totalClients, totalMotorcycles, motorcyclesWithClient] =
     await Promise.all([
       db.client.count(),
@@ -35,6 +36,7 @@ const getOverviewStats = async (): Promise<OverviewStats> => {
 };
 
 const getArrivalStatusCounts = async (): Promise<ArrivalStatusCount[]> => {
+  await requireAuth();
   const [delayed, arrived, noInformation] = await Promise.all([
     db.motorcycle.count({
       where: { forecastArrivalStatus: "DELAYED" },
@@ -60,6 +62,7 @@ const getArrivalStatusCounts = async (): Promise<ArrivalStatusCount[]> => {
 
 const getRegistrationStatusCounts =
   async (): Promise<RegistrationStatusCount[]> => {
+    await requireAuth();
     const [noPlate, plating, plated] = await Promise.all([
       db.motorcycle.count({
         where: { registrationStatus: "NO_PLATE" },
@@ -86,6 +89,7 @@ const getRegistrationStatusCounts =
 const getSalesByMonth = async (
   months = 3,
 ): Promise<SalesByMonth[]> => {
+  await requireAuth();
   const rows = await db.$queryRaw<
     { month: string; count: bigint }[]
   >`
@@ -104,6 +108,7 @@ const getSalesByMonth = async (
 };
 
 const getSalesBySeller = async (): Promise<SalesBySeller[]> => {
+  await requireAuth();
   const result = await db.client.groupBy({
     by: ["sellersName"],
     _count: { id: true },
@@ -117,6 +122,7 @@ const getSalesBySeller = async (): Promise<SalesBySeller[]> => {
 };
 
 const getSalesByCity = async (): Promise<SalesByCity[]> => {
+  await requireAuth();
   const result = await db.client.groupBy({
     by: ["city"],
     _count: { id: true },
@@ -132,6 +138,7 @@ const getSalesByCity = async (): Promise<SalesByCity[]> => {
 const getForecastArrivals = async (
   months = 3,
 ): Promise<ForecastArrival[]> => {
+  await requireAuth();
   const today = new Date();
   const futureDate = new Date(
     today.getFullYear(),
@@ -168,6 +175,7 @@ const getForecastArrivals = async (
 };
 
 const getTopModels = async (limit = 5): Promise<TopModel[]> => {
+  await requireAuth();
   const result = await db.motorcycle.groupBy({
     by: ["model"],
     _count: { id: true },
@@ -185,6 +193,7 @@ const getStalledMotorcycles = async (
   days = 30,
   limit = 5,
 ): Promise<StalledMotorcycle[]> => {
+  await requireAuth();
   const cutoff = new Date(Date.now() - days * 86400000);
 
   const result = await db.motorcycle.findMany({
@@ -214,6 +223,7 @@ const getStalledMotorcycles = async (
 const getClientAcquisition = async (
   months = 6,
 ): Promise<ClientAcquisition[]> => {
+  await requireAuth();
   const cutoff = new Date();
   cutoff.setMonth(cutoff.getMonth() - months);
 
@@ -237,6 +247,7 @@ const getClientAcquisition = async (
 };
 
 const getRecentClients = async (limit = 5): Promise<RecentClient[]> => {
+  await requireAuth();
   const result = await db.client.findMany({
     orderBy: { createdAt: "desc" },
     take: limit,
@@ -261,6 +272,7 @@ const getRecentClients = async (limit = 5): Promise<RecentClient[]> => {
 };
 
 const getAvgMotorcyclesPerClient = async (): Promise<number> => {
+  await requireAuth();
   const [totalMotorcycles, totalClients] = await Promise.all([
     db.motorcycle.count(),
     db.client.count(),
@@ -272,6 +284,7 @@ const getAvgMotorcyclesPerClient = async (): Promise<number> => {
 };
 
 const getDaysSinceLastSale = async (): Promise<number | null> => {
+  await requireAuth();
   const lastSale = await db.client.findFirst({
     where: { billingDate: { not: null } },
     orderBy: { billingDate: "desc" },
@@ -288,6 +301,7 @@ const getDaysSinceLastSale = async (): Promise<number | null> => {
 const getUnbilledClients = async (
   limit = 5,
 ): Promise<UnbilledClient[]> => {
+  await requireAuth();
   const result = await db.client.findMany({
     where: { billingDate: null, motorcycles: { some: {} } },
     orderBy: { createdAt: "desc" },
@@ -312,44 +326,8 @@ const getUnbilledClients = async (
   }));
 };
 
-const getProjectionStats = async (): Promise<ProjectionStats> => {
-  const [stockAgg, soldAgg, totalAgg, yearDist] = await Promise.all([
-    db.motorcycle.aggregate({
-      where: { clientId: null, price: { not: null } },
-      _sum: { price: true },
-      _count: { id: true },
-    }),
-    db.motorcycle.aggregate({
-      where: { clientId: { not: null }, price: { not: null } },
-      _sum: { price: true },
-      _count: { id: true },
-    }),
-    db.motorcycle.aggregate({
-      where: { price: { not: null } },
-      _sum: { price: true },
-      _avg: { price: true },
-    }),
-    db.motorcycle.groupBy({
-      by: ["year"],
-      _count: { id: true },
-      orderBy: { year: "desc" },
-    }),
-  ]);
-
-  return {
-    stockValue: Number(stockAgg._sum.price ?? 0),
-    soldValue: Number(soldAgg._sum.price ?? 0),
-    totalValue: Number(totalAgg._sum.price ?? 0),
-    stockCount: stockAgg._count.id,
-    soldCount: soldAgg._count.id,
-    avgPrice: Number(totalAgg._avg.price ?? 0),
-    yearDistribution: yearDist
-      .filter((y) => y.year !== null)
-      .map((y) => ({ year: y.year!, count: y._count.id })),
-  };
-};
-
 const getRecentActivity = async (limit = 10): Promise<Activity[]> => {
+  await requireAuth();
   const [sales, clients, registrations] = await Promise.all([
     db.client.findMany({
       where: { billingDate: { not: null } },
@@ -425,5 +403,4 @@ export {
   getDaysSinceLastSale,
   getUnbilledClients,
   getRecentActivity,
-  getProjectionStats,
 };

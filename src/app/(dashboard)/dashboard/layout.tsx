@@ -6,7 +6,6 @@ import {
   DollarSign,
   Package,
   Users,
-  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,7 +22,6 @@ const DashboardLayout = ({ children }: LayoutProps) => {
     if (pathname.startsWith("/dashboard/sales")) return "sales";
     if (pathname.startsWith("/dashboard/stock")) return "stock";
     if (pathname.startsWith("/dashboard/clients")) return "clients";
-    if (pathname.startsWith("/dashboard/projections")) return "projections";
     return "overview";
   };
 
@@ -53,12 +51,6 @@ const DashboardLayout = ({ children }: LayoutProps) => {
             <Link href="/dashboard/clients">
               <Users />
               Clientes
-            </Link>
-          </TabsTrigger>
-          <TabsTrigger value="projections" asChild>
-            <Link href="/dashboard/projections">
-              <TrendingUp />
-              Projeções
             </Link>
           </TabsTrigger>
         </TabsList>

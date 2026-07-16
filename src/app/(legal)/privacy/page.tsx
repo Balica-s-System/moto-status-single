@@ -24,7 +24,7 @@ const PrivacyPage = () => {
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
           A{" "}
-          <strong className="text-foreground">Balica&apos;s System</strong>{" "}
+          <strong className="text-foreground">Balica Labs</strong>{" "}
           é a controladora dos dados pessoais tratados no âmbito do Sistema
           Auge Motos, conforme definido pela Lei Geral de Proteção de Dados
           (Lei nº 13.709/2018 — LGPD).
@@ -81,7 +81,7 @@ const PrivacyPage = () => {
           4. Compartilhamento com Terceiros
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          A Balica&apos;s System não comercializa dados pessoais. O
+          A Balica Labs não comercializa dados pessoais. O
           compartilhamento ocorre apenas com:
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-muted-foreground">
@@ -174,7 +174,7 @@ const PrivacyPage = () => {
           para:
         </p>
         <p className="text-sm leading-relaxed">
-          <strong>Balica&apos;s System</strong>
+          <strong>Balica Labs</strong>
           <br />
           E-mail: privacidade@balicassystem.com
         </p>

@@ -79,16 +79,6 @@ type Activity = {
   date: string;
 };
 
-type ProjectionStats = {
-  stockValue: number;
-  soldValue: number;
-  totalValue: number;
-  stockCount: number;
-  soldCount: number;
-  avgPrice: number;
-  yearDistribution: { year: number; count: number }[];
-};
-
 export type {
   OverviewStats,
   ArrivalStatusCount,
@@ -103,5 +93,4 @@ export type {
   RecentClient,
   UnbilledClient,
   Activity,
-  ProjectionStats,
 };

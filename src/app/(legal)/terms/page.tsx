@@ -20,7 +20,7 @@ const TermsPage = () => {
         <p className="text-sm leading-relaxed text-muted-foreground">
           Estes Termos de Uso regulam a utilização do sistema de gestão Auge
           Motos (&ldquo;Sistema&rdquo;), fornecido pela{" "}
-          <strong className="text-foreground">Balica&apos;s System</strong>
+          <strong className="text-foreground">Balica Labs</strong>
           (&ldquo;Fornecedora&rdquo;) à empresa contratante
           (&ldquo;Contratante&rdquo;) mediante assinatura ou licença de uso.
         </p>
@@ -32,7 +32,7 @@ const TermsPage = () => {
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
           O Sistema, incluindo seu código-fonte, design, logotipos, marcas e
-          documentação, é propriedade exclusiva da Balica&apos;s System e está
+          documentação, é propriedade exclusiva da Balica Labs e está
           protegido pelas leis de propriedade intelectual. O Contratante recebe
           uma licença limitada, não exclusiva e intransferível para uso do
           Sistema, não adquirindo qualquer direito de propriedade sobre ele.
@@ -40,7 +40,7 @@ const TermsPage = () => {
         <p className="text-sm leading-relaxed text-muted-foreground">
           É vedado ao Contratante copiar, modificar, distribuir, sublicenciar,
           realizar engenharia reversa ou criar obras derivadas do Sistema sem
-          autorização expressa por escrito da Balica&apos;s System.
+          autorização expressa por escrito da Balica Labs.
         </p>
       </section>
 
@@ -77,7 +77,7 @@ const TermsPage = () => {
           5. Suporte e Manutenção
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          A Balica&apos;s System envidará esforços para manter o Sistema
+          A Balica Labs envidará esforços para manter o Sistema
           operacional e seguro, realizando manutenções periódicas e correções
           de falhas. O nível de suporte e os prazos de atendimento serão
           definidos no contrato comercial.
@@ -89,7 +89,7 @@ const TermsPage = () => {
           6. Limitação de Responsabilidade
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          A Balica&apos;s System não será responsável por danos indiretos,
+          A Balica Labs não será responsável por danos indiretos,
           lucros cessantes ou perda de dados decorrentes do uso do Sistema,
           exceto nos casos previstos em lei. A responsabilidade total da
           Fornecedora está limitada ao valor pago pelo Contratante nos últimos

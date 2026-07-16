@@ -1,8 +1,8 @@
 # Auge Motos
 
-Sistema de gestão para concessionária de motos — controle de inventário, clientes, vendas e projeções financeiras.
+Sistema de gestão para concessionária de motos — controle de inventário, clientes e vendas.
 
-**Desenvolvido por Balica's System.**  
+**Desenvolvido por Balica Labs.**  
 Uso permitido apenas mediante licença válida.  
 Consulte o arquivo [LICENSE](./LICENSE) para mais informações.
 
@@ -94,7 +94,7 @@ src/
 │   │   │   ├── sales/          # Vendas
 │   │   │   ├── stock/          # Estoque
 │   │   │   ├── clients/        # Clientes
-│   │   │   └── projections/    # Projeções financeiras
+
 │   │   ├── management/
 │   │   │   ├── inventory/      # CRUD de motos
 │   │   │   └── clients/        # CRUD de clientes
@@ -130,7 +130,7 @@ src/
 | **Vendas** | Gráficos de vendas por vendedor e por cidade |
 | **Estoque** | Previsão de chegadas, modelos mais vendidos, motos paradas |
 | **Clientes** | Aquisição ao longo do tempo, clientes recentes, média de motos por cliente, clientes sem faturamento |
-| **Projeções** | Valor em estoque vs vendido, preço médio, distribuição por ano |
+
 
 ### Gestão de Inventário
 
@@ -161,7 +161,7 @@ src/
 
 ## Licença
 
-Este software é propriedade exclusiva da **Balica's System**.  
+Este software é propriedade exclusiva da **Balica Labs**.  
 Todos os direitos reservados.  
 O uso é permitido apenas mediante licença válida.
 

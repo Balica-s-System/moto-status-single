@@ -6,7 +6,7 @@ const roleEnum = z.enum(["admin", "user"]);
 const baseFields = {
   name: requiredStringSchema,
   email: requiredStringSchema.email("E-mail inválido"),
-  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
   role: roleEnum,
 };
 
@@ -16,7 +16,7 @@ const userSchema = z.discriminatedUnion("action", [
     ...baseFields,
     action: z.literal("update"),
     id: z.string().min(1),
-    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres").optional().or(z.literal("")),
+    password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres").optional().or(z.literal("")),
   }),
 ]);
 

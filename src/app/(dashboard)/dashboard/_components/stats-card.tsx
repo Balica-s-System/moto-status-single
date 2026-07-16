@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type StatsCardProps = {
   title: string;
-  value: number;
+  value: number | string;
   icon: LucideIcon;
 };
 
@@ -17,7 +17,7 @@ const StatsCard = ({ title, value, icon: Icon }: StatsCardProps) => {
         <Icon className="size-5 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <p className="text-3xl font-bold">{value}</p>
+        <p className="text-xl sm:text-2xl lg:text-2xl font-bold">{value}</p>
       </CardContent>
     </Card>
   );

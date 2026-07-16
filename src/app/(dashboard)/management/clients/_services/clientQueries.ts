@@ -1,6 +1,7 @@
 "use server";
 
 import { format } from "date-fns";
+import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ClientSchema } from "../_types/clientSchema";
 import { PaginatedResult } from "@/lib/types/paginatedResult";
@@ -13,6 +14,7 @@ import { Prisma } from "$/generated/prisma/browser";
 const getClients = async (
   filters: ClientFiltersSchema,
 ): Promise<PaginatedResult<ClientSchema>> => {
+  await requireAuth();
   const validatedFilters = clientFiltersSchema.parse(filters);
 
   const {
@@ -27,10 +29,10 @@ const getClients = async (
 
   if (searchTerm) {
     where.OR = [
-      { name: { contains: searchTerm } },
-      { cpf: { contains: searchTerm } },
-      { city: { contains: searchTerm } },
-      { sellersName: { contains: searchTerm } },
+      { name: { contains: searchTerm, mode: "insensitive" } },
+      { cpf: { contains: searchTerm, mode: "insensitive" } },
+      { city: { contains: searchTerm, mode: "insensitive" } },
+      { sellersName: { contains: searchTerm, mode: "insensitive" } },
     ];
   }
 
@@ -64,6 +66,7 @@ type ClientWithMotorcycles = ClientSchema & {
 };
 
 const getClient = async (id: string): Promise<ClientWithMotorcycles> => {
+  await requireAuth();
   const res = await db.client.findFirst({
     where: { id },
     include: { motorcycles: { select: { id: true, chassi: true, model: true } } },
@@ -86,13 +89,14 @@ const getAvailableMotorcycles = async (
   search?: string,
   includeIds?: string[],
 ): Promise<{ id: string; chassi: string; model: string }[]> => {
+  await requireAuth();
   const clientFilter: Prisma.MotorcycleWhereInput =
     includeIds?.length
       ? { OR: [{ clientId: null }, { id: { in: includeIds } }] }
       : { clientId: null };
 
   const searchFilter: Prisma.MotorcycleWhereInput | undefined = search
-    ? { OR: [{ chassi: { contains: search, mode: 'insensitive' } }, { model: { contains: search, mode: 'insensitive' } }] }
+    ? { OR: [{ chassi: { contains: search, mode: "insensitive" } }, { model: { contains: search, mode: "insensitive" } }] }
     : undefined;
 
   const where: Prisma.MotorcycleWhereInput = searchFilter

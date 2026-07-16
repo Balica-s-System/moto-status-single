@@ -28,12 +28,10 @@ export type AggregateMotorcycle = {
 
 export type MotorcycleAvgAggregateOutputType = {
   year: number | null
-  price: runtime.Decimal | null
 }
 
 export type MotorcycleSumAggregateOutputType = {
   year: number | null
-  price: runtime.Decimal | null
 }
 
 export type MotorcycleMinAggregateOutputType = {
@@ -45,7 +43,6 @@ export type MotorcycleMinAggregateOutputType = {
   registrationStatus: $Enums.RegistrationStatus | null
   registrationDate: Date | null
   year: number | null
-  price: runtime.Decimal | null
   clientId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -60,7 +57,6 @@ export type MotorcycleMaxAggregateOutputType = {
   registrationStatus: $Enums.RegistrationStatus | null
   registrationDate: Date | null
   year: number | null
-  price: runtime.Decimal | null
   clientId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -75,7 +71,6 @@ export type MotorcycleCountAggregateOutputType = {
   registrationStatus: number
   registrationDate: number
   year: number
-  price: number
   clientId: number
   createdAt: number
   updatedAt: number
@@ -85,12 +80,10 @@ export type MotorcycleCountAggregateOutputType = {
 
 export type MotorcycleAvgAggregateInputType = {
   year?: true
-  price?: true
 }
 
 export type MotorcycleSumAggregateInputType = {
   year?: true
-  price?: true
 }
 
 export type MotorcycleMinAggregateInputType = {
@@ -102,7 +95,6 @@ export type MotorcycleMinAggregateInputType = {
   registrationStatus?: true
   registrationDate?: true
   year?: true
-  price?: true
   clientId?: true
   createdAt?: true
   updatedAt?: true
@@ -117,7 +109,6 @@ export type MotorcycleMaxAggregateInputType = {
   registrationStatus?: true
   registrationDate?: true
   year?: true
-  price?: true
   clientId?: true
   createdAt?: true
   updatedAt?: true
@@ -132,7 +123,6 @@ export type MotorcycleCountAggregateInputType = {
   registrationStatus?: true
   registrationDate?: true
   year?: true
-  price?: true
   clientId?: true
   createdAt?: true
   updatedAt?: true
@@ -234,7 +224,6 @@ export type MotorcycleGroupByOutputType = {
   registrationStatus: $Enums.RegistrationStatus | null
   registrationDate: Date | null
   year: number | null
-  price: runtime.Decimal | null
   clientId: string | null
   createdAt: Date
   updatedAt: Date
@@ -272,7 +261,6 @@ export type MotorcycleWhereInput = {
   registrationStatus?: Prisma.EnumRegistrationStatusNullableFilter<"Motorcycle"> | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.DateTimeNullableFilter<"Motorcycle"> | Date | string | null
   year?: Prisma.IntNullableFilter<"Motorcycle"> | number | null
-  price?: Prisma.DecimalNullableFilter<"Motorcycle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.StringNullableFilter<"Motorcycle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
@@ -288,7 +276,6 @@ export type MotorcycleOrderByWithRelationInput = {
   registrationStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationDate?: Prisma.SortOrderInput | Prisma.SortOrder
   year?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -307,7 +294,6 @@ export type MotorcycleWhereUniqueInput = Prisma.AtLeast<{
   registrationStatus?: Prisma.EnumRegistrationStatusNullableFilter<"Motorcycle"> | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.DateTimeNullableFilter<"Motorcycle"> | Date | string | null
   year?: Prisma.IntNullableFilter<"Motorcycle"> | number | null
-  price?: Prisma.DecimalNullableFilter<"Motorcycle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.StringNullableFilter<"Motorcycle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
@@ -323,7 +309,6 @@ export type MotorcycleOrderByWithAggregationInput = {
   registrationStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   registrationDate?: Prisma.SortOrderInput | Prisma.SortOrder
   year?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -346,7 +331,6 @@ export type MotorcycleScalarWhereWithAggregatesInput = {
   registrationStatus?: Prisma.EnumRegistrationStatusNullableWithAggregatesFilter<"Motorcycle"> | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Motorcycle"> | Date | string | null
   year?: Prisma.IntNullableWithAggregatesFilter<"Motorcycle"> | number | null
-  price?: Prisma.DecimalNullableWithAggregatesFilter<"Motorcycle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.StringNullableWithAggregatesFilter<"Motorcycle"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Motorcycle"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Motorcycle"> | Date | string
@@ -361,7 +345,6 @@ export type MotorcycleCreateInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   client?: Prisma.ClientCreateNestedOneWithoutMotorcyclesInput
@@ -376,7 +359,6 @@ export type MotorcycleUncheckedCreateInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -391,7 +373,6 @@ export type MotorcycleUpdateInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneWithoutMotorcyclesNestedInput
@@ -406,7 +387,6 @@ export type MotorcycleUncheckedUpdateInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -421,7 +401,6 @@ export type MotorcycleCreateManyInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -436,7 +415,6 @@ export type MotorcycleUpdateManyMutationInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -450,7 +428,6 @@ export type MotorcycleUncheckedUpdateManyInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -475,7 +452,6 @@ export type MotorcycleCountOrderByAggregateInput = {
   registrationStatus?: Prisma.SortOrder
   registrationDate?: Prisma.SortOrder
   year?: Prisma.SortOrder
-  price?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -483,7 +459,6 @@ export type MotorcycleCountOrderByAggregateInput = {
 
 export type MotorcycleAvgOrderByAggregateInput = {
   year?: Prisma.SortOrder
-  price?: Prisma.SortOrder
 }
 
 export type MotorcycleMaxOrderByAggregateInput = {
@@ -495,7 +470,6 @@ export type MotorcycleMaxOrderByAggregateInput = {
   registrationStatus?: Prisma.SortOrder
   registrationDate?: Prisma.SortOrder
   year?: Prisma.SortOrder
-  price?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -510,7 +484,6 @@ export type MotorcycleMinOrderByAggregateInput = {
   registrationStatus?: Prisma.SortOrder
   registrationDate?: Prisma.SortOrder
   year?: Prisma.SortOrder
-  price?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -518,7 +491,6 @@ export type MotorcycleMinOrderByAggregateInput = {
 
 export type MotorcycleSumOrderByAggregateInput = {
   year?: Prisma.SortOrder
-  price?: Prisma.SortOrder
 }
 
 export type MotorcycleCreateNestedManyWithoutClientInput = {
@@ -579,14 +551,6 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -600,7 +564,6 @@ export type MotorcycleCreateWithoutClientInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -614,7 +577,6 @@ export type MotorcycleUncheckedCreateWithoutClientInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -657,7 +619,6 @@ export type MotorcycleScalarWhereInput = {
   registrationStatus?: Prisma.EnumRegistrationStatusNullableFilter<"Motorcycle"> | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.DateTimeNullableFilter<"Motorcycle"> | Date | string | null
   year?: Prisma.IntNullableFilter<"Motorcycle"> | number | null
-  price?: Prisma.DecimalNullableFilter<"Motorcycle"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   clientId?: Prisma.StringNullableFilter<"Motorcycle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Motorcycle"> | Date | string
@@ -672,7 +633,6 @@ export type MotorcycleCreateManyClientInput = {
   registrationStatus?: $Enums.RegistrationStatus | null
   registrationDate?: Date | string | null
   year?: number | null
-  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -686,7 +646,6 @@ export type MotorcycleUpdateWithoutClientInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -700,7 +659,6 @@ export type MotorcycleUncheckedUpdateWithoutClientInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -714,7 +672,6 @@ export type MotorcycleUncheckedUpdateManyWithoutClientInput = {
   registrationStatus?: Prisma.NullableEnumRegistrationStatusFieldUpdateOperationsInput | $Enums.RegistrationStatus | null
   registrationDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   year?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -730,7 +687,6 @@ export type MotorcycleSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   registrationStatus?: boolean
   registrationDate?: boolean
   year?: boolean
-  price?: boolean
   clientId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -746,7 +702,6 @@ export type MotorcycleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   registrationStatus?: boolean
   registrationDate?: boolean
   year?: boolean
-  price?: boolean
   clientId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -762,7 +717,6 @@ export type MotorcycleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   registrationStatus?: boolean
   registrationDate?: boolean
   year?: boolean
-  price?: boolean
   clientId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -778,13 +732,12 @@ export type MotorcycleSelectScalar = {
   registrationStatus?: boolean
   registrationDate?: boolean
   year?: boolean
-  price?: boolean
   clientId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MotorcycleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chassi" | "model" | "forecastArrival" | "forecastArrivalStatus" | "registrationStatus" | "registrationDate" | "year" | "price" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["motorcycle"]>
+export type MotorcycleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chassi" | "model" | "forecastArrival" | "forecastArrivalStatus" | "registrationStatus" | "registrationDate" | "year" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["motorcycle"]>
 export type MotorcycleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.Motorcycle$clientArgs<ExtArgs>
 }
@@ -809,7 +762,6 @@ export type $MotorcyclePayload<ExtArgs extends runtime.Types.Extensions.Internal
     registrationStatus: $Enums.RegistrationStatus | null
     registrationDate: Date | null
     year: number | null
-    price: runtime.Decimal | null
     clientId: string | null
     createdAt: Date
     updatedAt: Date
@@ -1245,7 +1197,6 @@ export interface MotorcycleFieldRefs {
   readonly registrationStatus: Prisma.FieldRef<"Motorcycle", 'RegistrationStatus'>
   readonly registrationDate: Prisma.FieldRef<"Motorcycle", 'DateTime'>
   readonly year: Prisma.FieldRef<"Motorcycle", 'Int'>
-  readonly price: Prisma.FieldRef<"Motorcycle", 'Decimal'>
   readonly clientId: Prisma.FieldRef<"Motorcycle", 'String'>
   readonly createdAt: Prisma.FieldRef<"Motorcycle", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Motorcycle", 'DateTime'>

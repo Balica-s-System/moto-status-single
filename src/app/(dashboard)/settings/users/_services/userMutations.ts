@@ -1,16 +1,18 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { UserSchema } from "../_types/userSchema";
 import { executeAction } from "@/lib/executeAction";
 import { headers } from "next/headers";
 
 const deleteUser = async (id: string) => {
+  await requireAdmin();
   await db.user.delete({ where: { id } });
 };
 
 const createUser = async (data: UserSchema) => {
+  await requireAdmin();
   const h = await headers();
   await executeAction({
     actionFn: () =>
@@ -27,6 +29,7 @@ const createUser = async (data: UserSchema) => {
 };
 
 const updateUser = async (data: UserSchema) => {
+  await requireAdmin();
   if (data.action === "update") {
     const h = await headers();
     await executeAction({
