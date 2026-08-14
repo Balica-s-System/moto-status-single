@@ -33,6 +33,16 @@ export type Motorcycle = Prisma.MotorcycleModel
  */
 export type user = Prisma.userModel
 /**
+ * Model Ticket
+ * 
+ */
+export type Ticket = Prisma.TicketModel
+/**
+ * Model TicketMessage
+ * 
+ */
+export type TicketMessage = Prisma.TicketMessageModel
+/**
  * Model session
  * 
  */

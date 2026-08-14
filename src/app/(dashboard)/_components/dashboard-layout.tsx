@@ -1,5 +1,33 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  BoxIcon,
+  ChevronDown,
+  ChevronsLeft,
+  LifeBuoy,
+  LogOut,
+  Menu,
+  PanelLeft,
+  Search,
+  ShieldIcon,
+  SquareActivity,
+  User2Icon,
+  Users2Icon,
+  X,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Footer } from "@/components/footer";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,27 +39,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
-import {
-  BoxIcon,
-  ChevronDown,
-  ChevronsLeft,
-  LogOut,
-  Menu,
-  PanelLeft,
-  Search,
-  ShieldIcon,
-  SquareActivity,
-  User2Icon,
-  Users2Icon,
-  X,
-} from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -77,6 +84,16 @@ const ROUTE_GROUPS: RouteGroup[] = [
         href: "/settings/users",
         label: "Usuários",
         icon: <ShieldIcon className="size-4" />,
+      },
+    ],
+  },
+  {
+    group: "Suporte",
+    items: [
+      {
+        href: "/support",
+        label: "Suporte",
+        icon: <LifeBuoy className="size-4" />,
       },
     ],
   },
@@ -179,7 +196,11 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
 
   const filteredRouteGroups = ROUTE_GROUPS.filter((group) => {
     if (userRole === "admin") return true;
-    return group.group === "Administração" || group.group === "Conta";
+    return (
+      group.group === "Administração" ||
+      group.group === "Conta" ||
+      group.group === "Suporte"
+    );
   });
 
   const handleLogout = async () => {
@@ -422,7 +443,9 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                   aria-label="Menu do usuário"
                 >
                   <Avatar className="size-7">
-                    {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                    {user.image && (
+                      <AvatarImage src={user.image} alt={user.name} />
+                    )}
                     <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                       {initials}
                     </AvatarFallback>
@@ -434,7 +457,9 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                 <DropdownMenuSeparator />
                 <div className="flex items-center gap-3 px-2 py-1.5">
                   <Avatar className="size-9">
-                    {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                    {user.image && (
+                      <AvatarImage src={user.image} alt={user.name} />
+                    )}
                     <AvatarFallback className="bg-primary/10 text-xs font-medium text-primary">
                       {initials}
                     </AvatarFallback>

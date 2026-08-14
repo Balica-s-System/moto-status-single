@@ -11,6 +11,8 @@
 export type * from './models/Client'
 export type * from './models/Motorcycle'
 export type * from './models/user'
+export type * from './models/Ticket'
+export type * from './models/TicketMessage'
 export type * from './models/session'
 export type * from './models/account'
 export type * from './models/verification'

@@ -54,6 +54,8 @@ export const ModelName = {
   Client: 'Client',
   Motorcycle: 'Motorcycle',
   user: 'user',
+  Ticket: 'Ticket',
+  TicketMessage: 'TicketMessage',
   session: 'session',
   account: 'account',
   verification: 'verification'
@@ -122,6 +124,32 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const TicketScalarFieldEnum = {
+  id: 'id',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
+  priority: 'priority',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
+
+
+export const TicketMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  userId: 'userId',
+  ticketId: 'ticketId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TicketMessageScalarFieldEnum = (typeof TicketMessageScalarFieldEnum)[keyof typeof TicketMessageScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
