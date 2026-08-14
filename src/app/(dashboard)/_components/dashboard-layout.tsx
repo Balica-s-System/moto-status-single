@@ -77,16 +77,16 @@ const ROUTE_GROUPS: RouteGroup[] = [
       },
     ],
   },
-  {
-    group: "Configurações",
-    items: [
-      {
-        href: "/settings/users",
-        label: "Usuários",
-        icon: <ShieldIcon className="size-4" />,
-      },
-    ],
-  },
+  // {
+  //   group: "Configurações",
+  //   items: [
+  //     {
+  //       href: "/settings/users",
+  //       label: "Usuários",
+  //       icon: <ShieldIcon className="size-4" />,
+  //     },
+  //   ],
+  // },
   {
     group: "Suporte",
     items: [
