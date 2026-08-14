@@ -1,14 +1,9 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  LayoutDashboard,
-  DollarSign,
-  Package,
-  Users,
-} from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -35,7 +30,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
               Visão Geral
             </Link>
           </TabsTrigger>
-          <TabsTrigger value="sales" asChild>
+          {/* <TabsTrigger value="sales" asChild>
             <Link href="/dashboard/sales">
               <DollarSign />
               Vendas
@@ -52,7 +47,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
               <Users />
               Clientes
             </Link>
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
       </Tabs>
       <div>{children}</div>

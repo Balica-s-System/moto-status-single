@@ -1,8 +1,7 @@
-import React from "react";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import type React from "react";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { cookies } from "next/headers";
 import DashboardLayout from "./_components/dashboard-layout";
 
 type LayoutProps = { children: React.ReactNode };
@@ -14,8 +13,6 @@ const Layout = async ({ children }: LayoutProps) => {
       headers: await headers(),
     });
   } catch {
-    // Erro ao validar sessão (ex: DB indisponível, sessão expirada)
-    // Limpa cookie de sessão para evitar loop no proxy
     const cookieStore = await cookies();
     const allCookies = cookieStore.getAll();
     for (const c of allCookies) {
@@ -27,8 +24,6 @@ const Layout = async ({ children }: LayoutProps) => {
   }
 
   if (!session) {
-    // Sessão não encontrada — limpa cookies de sessão antes de redirecionar
-    // para evitar que o proxy veja o cookie velho e crie loop
     const cookieStore = await cookies();
     const allCookies = cookieStore.getAll();
     for (const c of allCookies) {
@@ -52,7 +47,5 @@ const Layout = async ({ children }: LayoutProps) => {
     </DashboardLayout>
   );
 };
-
-
 
 export default Layout;
