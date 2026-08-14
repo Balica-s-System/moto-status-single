@@ -19,6 +19,9 @@ const useDeleteMotorcycle = () => {
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
+      });
     },
   });
 };
@@ -35,6 +38,9 @@ const useCreateMotorcycle = () => {
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
+      });
     },
   });
 };
@@ -50,6 +56,9 @@ const useUpdateMotorcycle = () => {
       toast.success("Motocicleta atualizada com sucesso.");
       queryClient.invalidateQueries({
         queryKey: ["motorcycle"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
       });
     },
   });

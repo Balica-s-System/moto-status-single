@@ -19,6 +19,9 @@ const useDeleteClient = () => {
       queryClient.invalidateQueries({
         queryKey: ["client"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
+      });
     },
   });
 };
@@ -35,6 +38,9 @@ const useCreateClient = () => {
       queryClient.invalidateQueries({
         queryKey: ["client"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
+      });
     },
   });
 };
@@ -50,6 +56,9 @@ const useUpdateClient = () => {
       toast.success("Cliente atualizado com sucesso.");
       queryClient.invalidateQueries({
         queryKey: ["client"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["availableMotorcycles"],
       });
     },
   });
