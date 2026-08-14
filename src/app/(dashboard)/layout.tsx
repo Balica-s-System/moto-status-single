@@ -4,10 +4,12 @@ import type React from "react";
 import { auth } from "@/lib/auth";
 import DashboardLayout from "./_components/dashboard-layout";
 
+type AuthSession = typeof auth.$Infer.Session;
 type LayoutProps = { children: React.ReactNode };
 
 const Layout = async ({ children }: LayoutProps) => {
-  let session;
+  let session: AuthSession | null = null;
+
   try {
     session = await auth.api.getSession({
       headers: await headers(),
